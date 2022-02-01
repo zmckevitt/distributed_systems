@@ -1,2 +1,3 @@
 # Distributed Systems Project
-## Zack McKevitt Rezwanur Rahman
+
+A project by Zack McKevitt and Md. Rezwanur Rahman
