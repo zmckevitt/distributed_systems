@@ -5,16 +5,46 @@ SERVER_IP = "127.0.0.1"
 SERVER_PORT = 8080
 
 if __name__ == "__main__":
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect((SERVER_IP, SERVER_PORT))
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((SERVER_IP, SERVER_PORT))
 
-        while True:
-            message = input("> ")
+    print("--------Commands--------")
+    print("1. sell - list an item for sale")
+    print("2. modify - change sale price of an item")
+    print("3. remove - remove a listed item")
+    print("4. list - list all items for sale by seller")
 
-            if(len(message) == 0):
-                print("Please enter a message.")
-                continue
+    while True:
+        message = input("> ")            
 
-            s.sendall(message.encode("utf-8"))
-            data = s.recv(1024)
-            print('Received', repr(data))
+        if(message == "sell"):
+            item_name = input("Please enter an item name: ")
+            item_category = input("Please enter an item category: ")
+            item_id = input("Please enter an item ID: ")
+            item_keywords = input("Please enter item keywords: ")
+            item_condition = input("Please enter the item's condition: ")
+            item_price = input("Please enter the price of the item: ")
+            message = "sell\n" + item_name + "\n" + item_category + "\n" \
+                        + item_id + "\n" + item_keywords + "\n" + item_condition \
+                        + "\n" + item_price + "\n"
+
+        elif(message == "modify"):
+            item_id = input("Please enter the item ID: ")
+            item_price = input("Please list the new price: ")
+            message = "modify\n" + item_id + "\n" + item_price + "\n"
+
+        elif(message == "remove"):
+            item_id = input("Please enter the item ID: ")
+            item_quantity = input("Please enter the quantity: ")
+            message = "remove\n" + item_id + "\n" + item_quantity + "\n"
+
+        elif(message == "list"):
+            message = "list\n"
+
+        else:
+            print("Please enter a message.")
+            continue
+
+        s.sendall(message.encode("utf-8"))
+        data = s.recv(1024)
+        print('Received', repr(data))
