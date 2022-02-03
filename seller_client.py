@@ -23,28 +23,31 @@ if __name__ == "__main__":
             item_id = input("Please enter an item ID: ")
             item_keywords = input("Please enter item keywords: ")
             item_condition = input("Please enter the item's condition: ")
+            if(item_condition.lower() == "new" ):
+                item_condition = "True"
+            else:
+                item_condition = "False"
             item_price = input("Please enter the price of the item: ")
-            message = "sell\n" + item_name + "\n" + item_category + "\n" \
-                        + item_id + "\n" + item_keywords + "\n" + item_condition \
-                        + "\n" + item_price + "\n"
+            message = "sell\n" + item_name + "\n" + item_category + "\n" + item_id \
+                    + "\n" + item_keywords + "\n" + item_condition + "\n" + item_price
 
         elif(message == "modify"):
             item_id = input("Please enter the item ID: ")
             item_price = input("Please list the new price: ")
-            message = "modify\n" + item_id + "\n" + item_price + "\n"
+            message = "modify\n" + item_id + "\n" + item_price
 
         elif(message == "remove"):
             item_id = input("Please enter the item ID: ")
             item_quantity = input("Please enter the quantity: ")
-            message = "remove\n" + item_id + "\n" + item_quantity + "\n"
+            message = "remove\n" + item_id + "\n" + item_quantity
 
         elif(message == "list"):
-            message = "list\n"
+            message = "list"
 
         else:
-            print("Please enter a message.")
+            print("Please enter a valid message.")
             continue
 
         s.sendall(message.encode("utf-8"))
         data = s.recv(1024)
-        print('Received', repr(data))
+        print(data.decode('utf-8'))
