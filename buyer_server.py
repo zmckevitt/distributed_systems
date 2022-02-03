@@ -1,6 +1,6 @@
 import sys
 import socket
-import mysql.connector
+#import mysql.connector
 
 HOST_IP = "127.0.0.1"
 
@@ -24,6 +24,7 @@ if __name__ == "__main__":
             print('Connected by', addr)
             while True:
                 data = conn.recv(1024)
+                print("Data = ", data)
                 if not data:
                     break
                 conn.sendall(data)
