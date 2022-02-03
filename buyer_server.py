@@ -1,6 +1,6 @@
 import sys
 import socket
-#import mysql.connector
+import mysql.connector
 from _thread import *
 import threading
 
