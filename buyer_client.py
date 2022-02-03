@@ -21,26 +21,26 @@ if __name__ == "__main__":
         if(message == "search"):
             search_category = input("Please enter search category: ")
             search_keywords = input("Please enter up to five keywords: ")
-            message = "search\n" + search_category + "\n" + search_keywords + "\n"
+            message = "search\n" + search_category + "\n" + search_keywords
 
         elif(message == "add"):
             item_id = input("Please enter an item ID: ")
             item_quantity = input("Please enter an item quantity: ")
-            message = "add\n" + item_id + "\n" + item_quantity + "\n"
+            message = "add\n" + item_id + "\n" + item_quantity
 
         elif(message == "remove"):
             item_id = input("Please enter an item ID: ")
             item_quantity = input("Please enter an item quantity")
-            message = "remove\n" + item_id + "\n" + item_quantity + "\n"
+            message = "remove\n" + item_id + "\n" + item_quantity
 
         elif(message == "clear"):
-            message = "clear\n"
+            message = "clear"
 
         elif(message == "display"):
-            message = "display\n"
+            message = "display"
 
         else:
-            print("Please enter a message.")
+            print("Please enter a valid message.")
             continue
 
         s.sendall(message.encode("utf-8"))
