@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
         elif(message == "remove"):
             item_id = input("Please enter an item ID: ")
-            item_quantity = input("Please enter an item quantity")
+            item_quantity = input("Please enter an item quantity: ")
             message = "remove\n" + item_id + "\n" + item_quantity
 
         elif(message == "clear"):

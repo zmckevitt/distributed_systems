@@ -13,6 +13,7 @@ prod_db = mysql.connector.connect(
     database="product"
 )
 
+
 # Handler for new connection
 # Connects to database to run commands
 # Closes connection upon termination
@@ -27,7 +28,8 @@ def thread_handler(conn):
 
         data = ""
         if command == "search":
-            sql_query = "SELECT * FROM products WHERE keywords LIKE '%"+tokens[2]+"%';"
+            sql_query = "SELECT * FROM products " \
+                        "WHERE category = " + tokens[1]+" AND keywords LIKE '%" + tokens[2] + "%';"
             print(sql_query)
             db_cursor.execute(sql_query)
             result = db_cursor.fetchall()
@@ -38,24 +40,33 @@ def thread_handler(conn):
                 data = "Database is empty."
             print(data)
         elif command == "add":
-            sql_query = "INSERT INTO cart VALUES("+tokens[1]+","+tokens[2]+");"
+            sql_query = "INSERT INTO cart VALUES(" + tokens[1] + "," + tokens[2] + ");"
             print(sql_query)
             db_cursor.execute(sql_query)
-            result = db_cursor.fetchone()
-            if result is not None:
+            prod_db.commit()
+            if db_cursor.rowcount > 0:
                 data = "Item added successfully."
             else:
                 data = "Item could not be added"
         elif command == "remove":
-            sql_query = "DELETE FROM cart WHERE id = "+tokens[1]+";"
+            sql_query = "UPDATE cart SET quantity = quantity-" + tokens[2] \
+                        + " WHERE id = " + tokens[1] + " AND quantity-" + tokens[2] + ">=0;"
             print(sql_query)
             db_cursor.execute(sql_query)
-            data = "Item deleted successfully."
+            prod_db.commit()
+            if db_cursor.rowcount > 0:
+                data = "Item(s) removed successfully."
+            else:
+                data = "Item(s) could not be removed"
         elif command == "clear":
             sql_query = "DELETE FROM cart;"
             print(sql_query)
             db_cursor.execute(sql_query)
-            data = "Cart cleared successfully."
+            prod_db.commit()
+            if db_cursor.rowcount > 0:
+                data = "Cart cleared successfully."
+            else:
+                data = "Cart could not be cleared"
         elif command == "display":
             sql_query = "SELECT * FROM cart;"
             print("Query == ", sql_query)
@@ -65,26 +76,26 @@ def thread_handler(conn):
             for x in result:
                 data += str(x) + "\n"
             if len(data) == 0:
-                data = "Database is empty."
+                data = "Your cart is empty."
             print(data)
         else:
             data = "ERROR"
 
-        # try/except wrapper to prevent error loggin on the server
+        # try/except wrapper to prevent error logging on the server
         try:
             conn.sendall(data.encode('utf-8'))
         except:
             pass
 
-
     # close connection after broken pipe
     conn.close()
+
 
 if __name__ == "__main__":
 
     db_cursor = prod_db.cursor()
 
-    if(len(sys.argv) < 2):
+    if (len(sys.argv) < 2):
         print("Usage: %s <port>" % sys.argv[0])
         exit()
 
@@ -95,9 +106,9 @@ if __name__ == "__main__":
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.bind((HOST_IP, PORT))
     s.listen()
-    
+
     while True:
         conn, addr = s.accept()
         print('Connected by', addr)
         start_new_thread(thread_handler, (conn,))
-    s.close()        
+    s.close()
