@@ -35,16 +35,19 @@ def thread_handler(conn):
             print(sql_query)
             db_cursor.execute(sql_query)
             data = "Item listed successfully."
+            prod_db.commit()
 
         elif(command == "modify"):
             sql_query = "UPDATE products SET price=" + tokens[2] + " WHERE id=" + tokens[1] + ";"
             db_cursor.execute(sql_query)
             data = "Price updated successfully."
+            prod_db.commit()
 
         elif(command == "remove"):
             sql_query = "DELETE FROM products WHERE id=" + tokens[1] + " LIMIT " + tokens[2] + ";"
             db_cursor.execute(sql_query)
             data = "Entry removed."
+            prod_db.commit()
 
         elif(command == "list"):
             db_cursor.execute("SELECT * FROM products;")
@@ -56,11 +59,11 @@ def thread_handler(conn):
         else:
             data = "ERROR"
 
-        # try/except wrapper to prevent error loggin on the server
+        # try/except wrapper to prevent error logging on the server
         try:
             conn.sendall(data.encode('utf-8'))
         except:
-            pass
+            break
     
     # close connection after broken pipe
     conn.close()

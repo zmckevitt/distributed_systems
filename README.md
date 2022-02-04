@@ -9,7 +9,9 @@ There is a table called ```products``` in the ```product``` database running on 
 To get set up with the database, first install mysql. In the mysql console, execute the following commands to create a new user. I will use the credentials given in the server files:
 
 ```CREATE USER 'prod'@'localhost' IDENTIFIED BY 'prodpassword';```
+
 ```GRANT ALL PRIVILEGES ON *.* TO 'prod'@'localhost' WITH GRANT OPTION;```
+
 ```FLUSH PRIVILEGES;```
 
 To create a new databse, use the ```init_db.py``` file. If you used a different username/password combination than above, you will need to modify the DB configuration in the ```init_db.py``` and server files. Then, to create the products table, enter the following command in your MySQL instance:

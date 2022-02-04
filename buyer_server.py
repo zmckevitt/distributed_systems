@@ -97,7 +97,7 @@ def thread_handler(conn):
         try:
             conn.sendall(data.encode('utf-8'))
         except:
-            pass
+            break
 
     # close connection after broken pipe
     conn.close()

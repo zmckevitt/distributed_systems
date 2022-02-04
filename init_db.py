@@ -18,3 +18,6 @@ if __name__ == "__main__":
     db_name = sys.argv[1]
     db_cursor = prod_db.cursor()
     db_cursor.execute("CREATE DATABASE " + db_name + ";")
+    db_cursor.execute("CREATE TABLE product.products (name VARCHAR(32), category INT, id INT, \
+                    keywords VARCHAR(40),item_condition BOOL, price DOUBLE);")
+    db_cursor.execute("CREATE TABLE product.cart (id INT, quantity INT);")
