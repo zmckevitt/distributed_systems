@@ -17,3 +17,7 @@ To create a new databse, use the ```init_db.py``` file. If you used a different 
 ```CREATE TABLE product.products (name VARCHAR(32), category INT, id INT, keywords VARCHAR(40), item_condition BOOL, price DOUBLE);```
 
 This will create a table called ```products``` in the ```product``` database with all of the correct columns.
+
+```CREATE TABLE product.cart (id INT, quantity INT);```
+
+This will create a table called ```cart``` with columns id and quantity
