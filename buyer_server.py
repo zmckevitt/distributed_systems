@@ -37,17 +37,30 @@ def thread_handler(conn):
             for x in result:
                 data += str(x) + "\n"
             if len(data) == 0:
-                data = "Database is empty."
+                data = "No matching data found."
             print(data)
         elif command == "add":
-            sql_query = "INSERT INTO cart VALUES(" + tokens[1] + "," + tokens[2] + ");"
-            print(sql_query)
-            db_cursor.execute(sql_query)
-            prod_db.commit()
-            if db_cursor.rowcount > 0:
-                data = "Item added successfully."
+            pre_query = "SELECT id FROM cart WHERE id = "+tokens[1] + ";"
+            db_cursor.execute(pre_query)
+            if db_cursor.rowcount == 0:
+                sql_query = "INSERT INTO cart VALUES(" + tokens[1] + "," + tokens[2] + ");"
+                new_cursor = prod_db.cursor()
+                new_cursor.execute(sql_query)
+                if new_cursor.rowcount > 0:
+                    data = "Item added successfully."
+                else:
+                    data = "Item could not be added"
             else:
-                data = "Item could not be added"
+                sql_query = "UPDATE cart SET quantity = quantity+" + tokens[2] \
+                        + " WHERE id = " + tokens[1] + ";"
+                print(sql_query)
+                new_cursor = prod_db.cursor()
+                new_cursor.execute(sql_query)
+                if new_cursor.rowcount > 0:
+                    data = "Item added successfully."
+                else:
+                    data = "Item could not be added"
+            prod_db.commit()
         elif command == "remove":
             sql_query = "UPDATE cart SET quantity = quantity-" + tokens[2] \
                         + " WHERE id = " + tokens[1] + " AND quantity-" + tokens[2] + ">=0;"
@@ -69,7 +82,6 @@ def thread_handler(conn):
                 data = "Cart could not be cleared"
         elif command == "display":
             sql_query = "SELECT * FROM cart;"
-            print("Query == ", sql_query)
             db_cursor.execute(sql_query)
             result = db_cursor.fetchall()
             data = ""
@@ -93,7 +105,7 @@ def thread_handler(conn):
 
 if __name__ == "__main__":
 
-    db_cursor = prod_db.cursor()
+    db_cursor = prod_db.cursor(buffered=True)
 
     if (len(sys.argv) < 2):
         print("Usage: %s <port>" % sys.argv[0])
