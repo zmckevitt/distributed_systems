@@ -8,25 +8,25 @@ The seller server interfaces with the products table in the product database whi
 
 ### Seller API functions
 
-	```sell``` - List an item for sale. Provide an item name, category, ID, keywords, condition, and sale price. This will call an INSERT command into the database to add a new entry.
+```sell``` - List an item for sale. Provide an item name, category, ID, keywords, condition, and sale price. This will call an INSERT command into the database to add a new entry.
 
-	```modify``` - Modify the price of a current item. Provide an item ID and new price. This will call an UPDATE query on the database.
+```modify``` - Modify the price of a current item. Provide an item ID and new price. This will call an UPDATE query on the database.
 
-	```remove``` - Remove an entry from the database. Provide an item ID and quantity. This will invoke a DELETE query and remove the quantity of items specified from the database.
+```remove``` - Remove an entry from the database. Provide an item ID and quantity. This will invoke a DELETE query and remove the quantity of items specified from the database.
 
-	```list``` - Lists all items in the database. Invokes a SELECT query.
+```list``` - Lists all items in the database. Invokes a SELECT query.
 
 ### Buyer API functions
 
-	```search``` - Search items by category. Provide an item category and keywords. This will use a SELECT query that passes the keywords to the LIKE command, which will match the provided keywords to similar ones in the database.
+```search``` - Search items by category. Provide an item category and keywords. This will use a SELECT query that passes the keywords to the LIKE command, which will match the provided keywords to similar ones in the database.
 
-	```display``` - Displays the current user's cart with a SELECT query.
+```display``` - Displays the current user's cart with a SELECT query.
 
-	```remove``` - Remove an item from the cart. Provide item id and quantity, which will issue an UPDATE database query to decrement the item's count. NOTE: removed items will remain in the cart with a quantity of zero. This was intended to keep items in a user's cart in case they intend to re-add them later on.
+```remove``` - Remove an item from the cart. Provide item id and quantity, which will issue an UPDATE database query to decrement the item's count. NOTE: removed items will remain in the cart with a quantity of zero. This was intended to keep items in a user's cart in case they intend to re-add them later on.
 
-	```clear``` - Clear the current cart. This will issue a DELETE command to delete everything from cart.
+```clear``` - Clear the current cart. This will issue a DELETE command to delete everything from cart.
 
-	```add``` - Add item to cart. Provide item ID and quantity, which will issue an INSERT query to the database. NOTE: it is possible to add more items than there are available to your cart. This will be addressed when transactions are added to the application.
+```add``` - Add item to cart. Provide item ID and quantity, which will issue an INSERT query to the database. NOTE: it is possible to add more items than there are available to your cart. This will be addressed when transactions are added to the application.
 
 ## Assumptions
 
@@ -72,27 +72,27 @@ We determined timing benchmarks entirely client-side, measuring the timing diffe
 
 Seller benchmarks: 
 
-	```sell``` - 0.00077s
+```sell``` - 0.00077s
 
-	```modify``` - 0.00492s
+```modify``` - 0.00492s
 
-	```remove``` - 0.00827s
+```remove``` - 0.00827s
 
-	```list``` - 0.00075s
+```list``` - 0.00075s
 
 Seller benchmark average: 0.0037s = 3.7ms
 
 Buyer benchmarks:
 
-	```search``` - 0.00105s
+```search``` - 0.00105s
 
-	```display``` - 0.00063s
+```display``` - 0.00063s
 
-	```remove``` - 0.00462s
+```remove``` - 0.00462s
 
-	```clear``` - 0.00620s
+```clear``` - 0.00620s
 
-	```add``` - 0.00620s
+```add``` - 0.00620s
 
 Buyer benchmark Average: 0.00374 = 3.74ms
 
@@ -102,27 +102,27 @@ Same machine average: 3.72ms
 
 Seller benchmarks:
 
-	```sell``` - 0.01580s
+```sell``` - 0.01580s
 
-	```modify``` - 0.02410s
+```modify``` - 0.02410s
 
-	```remove``` - 0.03597s
+```remove``` - 0.03597s
 
-	```list``` - 0.02128s
+```list``` - 0.02128s
 
 Seller benchmark average: 0.02429s = 24.29 ms
 
 Buyer benchmarks:
 
-	```search``` - 0.01017s
+```search``` - 0.01017s
 
-	```display``` - 0.01416s
+```display``` - 0.01416s
 
-	```remove``` - 0.01793s
+```remove``` - 0.01793s
 
-	```clear``` - 0.04088s
+```clear``` - 0.04088s
 
-	```add``` - 0.01632s
+```add``` - 0.01632s
 
 Buyer benchmark average: 0.01989s = 19.89ms
 
