@@ -17,8 +17,6 @@ prod_db = mysql.connector.connect(
 # Handler for new connection
 # Connects to database to run commands
 # Closes connection upon termination
-
-
 def thread_handler(conn):
     while True:
         data = conn.recv(1024)

@@ -1,5 +1,6 @@
 import sys
 import socket
+import time
 
 SERVER_IP = "127.0.0.1"
 SERVER_PORT = 8080
@@ -48,6 +49,9 @@ if __name__ == "__main__":
             print("Please enter a valid message.")
             continue
 
+        time_1 = time.time()
         s.sendall(message.encode("utf-8"))
         data = s.recv(1024)
+        time_2 = time.time()
         print(data.decode('utf-8'))
+        print("(Took " + str(time_2-time_1) + " seconds)")
