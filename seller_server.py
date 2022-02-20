@@ -37,19 +37,30 @@ def thread_handler(conn):
 
         if(command == "sell"):
 
-            # TODO: item id based off of DB information
+            u_id = tokens[6]
+            if(int(u_id) == -1):
+                data = "User is not logged in."
 
-            sql_query = "INSERT INTO products " \
-                        + "(name, category, id, keywords, item_condition, price) " \
-                        + "VALUES " \
-                        + "(\"" + tokens[1] + "\", " + tokens[2] + ", " \
-                        + tokens[3] + ", " + "\"" + tokens[4] + "\", " \
-                        + tokens[5] + ", " + tokens[6] + ");"
+            else:
+                db_cursor.execute("SELECT MAX(id) FROM products;")
+                data = ""
 
-            print(sql_query)
-            db_cursor.execute(sql_query)
-            data = "Item listed successfully."
-            prod_db.commit()
+                new_id = 0
+                for x in db_cursor:
+                    if(isinstance(x[0], int)):
+                        new_id = x[0]+1
+
+                sql_query = "INSERT INTO products " \
+                            + "(name, category, id, keywords, item_condition, price, s_id) " \
+                            + "VALUES " \
+                            + "(\"" + tokens[1] + "\", " + tokens[2] + ", " \
+                            + str(new_id) + ", " + "\"" + tokens[3] + "\", " \
+                            + tokens[4] + ", " + tokens[5] + ", " + tokens[6] + ");"
+
+                print(sql_query)
+                db_cursor.execute(sql_query)
+                data = "Item listed successfully."
+                prod_db.commit()
 
         elif(command == "modify"):
             sql_query = "UPDATE products SET price=" + tokens[2] + " WHERE id=" + tokens[1] + ";"
@@ -64,12 +75,16 @@ def thread_handler(conn):
             prod_db.commit()
 
         elif(command == "list"):
-            db_cursor.execute("SELECT * FROM products;")
-            data = ""
-            for x in db_cursor:
-                data += str(x) + "\n"
-            if(len(data) == 0):
-                data = "Database is empty."
+            u_id = tokens[1]
+            if(int(u_id) == -1):
+                data = "User is not logged in."
+            else:
+                db_cursor.execute("SELECT * FROM products WHERE s_id=" + tokens[1] + ";")
+                data = ""
+                for x in db_cursor:
+                    data += str(x) + "\n"
+                if(len(data) == 0):
+                    data = "Database is empty."
 
         elif(command == "create"):
 

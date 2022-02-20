@@ -56,11 +56,11 @@ To get set up with the database, first install mysql. In the mysql console, exec
 
 To create a new databse, use the ```init_db.py``` file. If you used a different username/password combination than above, you will need to modify the DB configuration in the ```init_db.py``` and server files. This will create the product database with the following table commands:
 
-```CREATE TABLE product.products (name VARCHAR(32), category INT, id INT, keywords VARCHAR(40), item_condition BOOL, price DOUBLE);```
+```CREATE TABLE product.products (name VARCHAR(32), category INT, id INT, keywords VARCHAR(40), item_condition BOOL, price DOUBLE, s_id INT);```
 
 This will create a table called ```products``` in the ```product``` database with all of the correct columns.
 
-```CREATE TABLE product.cart (id INT, quantity INT);```
+```CREATE TABLE product.cart (id INT, b_id INT, quantity INT);```
 
 This will create a table called ```cart``` with columns id and quantity
 
@@ -82,7 +82,7 @@ A passwords table:
 
 A buyer history table:
 
-```TBD```
+```CREATE TABLE customer.purchased(id INT, b_id INT, quantity INT);```
 
 Lastly, we need a table to keep track of users currently logged in:
 

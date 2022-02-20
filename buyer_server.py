@@ -47,59 +47,84 @@ def thread_handler(conn):
             print(data)
 
         elif command == "add":
-            pre_query = "SELECT id FROM cart WHERE id = "+tokens[1] + ";"
-            db_cursor.execute(pre_query)
-            if db_cursor.rowcount == 0:
-                sql_query = "INSERT INTO cart VALUES(" + tokens[1] + "," + tokens[2] + ");"
-                new_cursor = prod_db.cursor()
-                new_cursor.execute(sql_query)
-                if new_cursor.rowcount > 0:
-                    data = "Item added successfully."
-                else:
-                    data = "Item could not be added"
+
+            u_id = tokens[3]
+            if(int(u_id) == -1):
+                data = "User is not logged in."
+
             else:
-                sql_query = "UPDATE cart SET quantity = quantity+" + tokens[2] \
-                        + " WHERE id = " + tokens[1] + ";"
-                print(sql_query)
-                new_cursor = prod_db.cursor()
-                new_cursor.execute(sql_query)
-                if new_cursor.rowcount > 0:
-                    data = "Item added successfully."
+                pre_query = "SELECT id FROM cart WHERE id = "+tokens[1] + " AND b_id=" + u_id + ";"
+                db_cursor.execute(pre_query)
+                if db_cursor.rowcount == 0:
+                    sql_query = "INSERT INTO cart VALUES(" + tokens[1] + "," + u_id + "," + tokens[2] + ");"
+                    new_cursor = prod_db.cursor()
+                    new_cursor.execute(sql_query)
+                    if new_cursor.rowcount > 0:
+                        data = "Item added successfully."
+                    else:
+                        data = "Item could not be added"
                 else:
-                    data = "Item could not be added"
-            prod_db.commit()
+                    sql_query = "UPDATE cart SET quantity = quantity+" + tokens[2] \
+                            + " WHERE id = " + tokens[1] + " AND b_id=" + u_id + ";"
+                    print(sql_query)
+                    new_cursor = prod_db.cursor()
+                    new_cursor.execute(sql_query)
+                    if new_cursor.rowcount > 0:
+                        data = "Item added successfully."
+                    else:
+                        data = "Item could not be added"
+                prod_db.commit()
 
         elif command == "remove":
-            sql_query = "UPDATE cart SET quantity = quantity-" + tokens[2] \
-                        + " WHERE id = " + tokens[1] + " AND quantity-" + tokens[2] + ">=0;"
-            print(sql_query)
-            db_cursor.execute(sql_query)
-            prod_db.commit()
-            if db_cursor.rowcount > 0:
-                data = "Item(s) removed successfully."
+
+            u_id = tokens[3]
+            if(int(u_id) == -1):
+                data = "User is not logged in."
+
             else:
-                data = "Item(s) could not be removed"
+                sql_query = "UPDATE cart SET quantity = quantity-" + tokens[2] \
+                            + " WHERE id = " + tokens[1] + " AND quantity-" \
+                            + tokens[2] + ">=0" + " AND b_id=" + u_id + ";"
+                print(sql_query)
+                db_cursor.execute(sql_query)
+                prod_db.commit()
+                if db_cursor.rowcount > 0:
+                    data = "Item(s) removed successfully."
+                else:
+                    data = "Item(s) could not be removed"
 
         elif command == "clear":
-            sql_query = "DELETE FROM cart;"
-            print(sql_query)
-            db_cursor.execute(sql_query)
-            prod_db.commit()
-            if db_cursor.rowcount > 0:
-                data = "Cart cleared successfully."
+
+            u_id = tokens[1]
+            if(int(u_id) == -1):
+                data = "User is not logged in."
+
             else:
-                data = "Cart could not be cleared"
+                sql_query = "DELETE FROM cart WHERE b_id=" + u_id + ";"
+                print(sql_query)
+                db_cursor.execute(sql_query)
+                prod_db.commit()
+                if db_cursor.rowcount > 0:
+                    data = "Cart cleared successfully."
+                else:
+                    data = "Cart could not be cleared"
 
         elif command == "display":
-            sql_query = "SELECT * FROM cart;"
-            db_cursor.execute(sql_query)
-            result = db_cursor.fetchall()
-            data = ""
-            for x in result:
-                data += str(x) + "\n"
-            if len(data) == 0:
-                data = "Your cart is empty."
-            print(data)
+
+            u_id = tokens[1]
+            if(int(u_id) == -1):
+                data = "User is not logged in."
+
+            else:
+                sql_query = "SELECT * FROM cart WHERE b_id=" + u_id + ";"
+                db_cursor.execute(sql_query)
+                result = db_cursor.fetchall()
+                data = ""
+                for x in result:
+                    data += str(x) + "\n"
+                if len(data) == 0:
+                    data = "Your cart is empty."
+                print(data)
 
         elif command == "create":
             # TODO: handle collisions?
@@ -179,7 +204,7 @@ def thread_handler(conn):
             data = str(u_id)
 
         elif command == "logout":
-            
+
             u_id = tokens[1]
             if(int(u_id) == -1):
                 data = "User is not logged in."
@@ -190,16 +215,104 @@ def thread_handler(conn):
                 data = "Logged out."
 
         elif command == "purchase":
-            pass
+
+            u_id = tokens[4]
+            if(int(u_id) == -1):
+                data = "User is not logged in."
+
+            # send purchase request to third party
+
+            # if invalid, exit
+
+            # if valid, add item to purchase table FROM CART
+
+            sql_query = "INSERT INTO customer.purchased (id, b_id, quantity) " \
+                        + "SELECT id, b_id, quantity FROM product.cart WHERE product.cart.b_id=" \
+                        + u_id + ";"
+
+            cus_cursor.execute(sql_query)
+            cus_db.commit()
+
+            # clear cart
+            sql_query = "DELETE FROM product.cart WHERE b_id=" + u_id + ";"
+
+            db_cursor.execute(sql_query)
+
+            prod_db.commit()
+            data = "Items have been purchased!"
+
+            # do we need to remove a purchased item from products table?
 
         elif command == "feedback":
-            pass
+
+            # TODO: set counter for number of times reviewed
+            # if this number is nonzero (1), do not allow review
+            # else, submit review and increment n times reviewed
+            
+            item_id = tokens[1]
+            review = tokens[2]
+            u_id = tokens[3]
+            if(int(u_id) == -1):
+                data = "User is not logged in."
+            else:
+
+                pre_query = "SELECT s_id FROM product.products "\
+                            + "INNER JOIN customer.purchased " \
+                            + "ON products.id = customer.purchased.id " \
+                            + "WHERE customer.purchased.b_id = " + u_id \
+                            + " AND customer.purchased.id = " + item_id + ";"
+
+                db_cursor.execute(pre_query)
+
+                # get seller ID
+                s_id = -1
+                for x in db_cursor:
+                    if(isinstance(x[0], int)):
+                        s_id = x[0]
+
+                if(s_id == -1):
+                    data = "Error: seller not found or product not in purchase history."
+                else:
+                    # positive review
+                    if(review == "True"):
+                        sql_query = "UPDATE feedback SET pos=pos+1 WHERE id=" + str(s_id) + ";"
+                    # negative review
+                    else:
+                        sql_query = "UPDATE feedback SET neg=neg+1 WHERE id=" + str(s_id) + ";"
+
+                    cus_cursor.execute(sql_query)
+                    cus_db.commit()
+
+                    data = "Feedback given."
 
         elif command == "rating":
-            pass
+            # Writeup says to provide BUYER id, but I assume it means SELLER id
+            s_id = tokens[1]
+            sql_query = "SELECT pos, neg FROM feedback where id=" + s_id + ";"
+            cus_cursor.execute(sql_query)
+
+            for x in cus_cursor:
+                data += str(x) + "\n"
+
+            if(len(data) == 0):
+                data = "Seller not found."
 
         elif command == "history":
-            pass
+            u_id = tokens[1]
+            if(int(u_id) == -1):
+                data = "User is not logged in."
+            else:
+                sql_query = "SELECT * FROM purchased WHERE b_id=" + u_id + ";"
+                cus_cursor.execute(sql_query)
+
+                for x in cus_cursor:
+                    data += str(x) + "\n"
+
+                if(len(data) == 0):
+                    data="User has no purchase history."
+
+                cus_db.commit()
+
 
         else:
             data = "ERROR"

@@ -32,7 +32,6 @@ if __name__ == "__main__":
         if(message == "sell"):
             item_name = input("Please enter an item name: ")
             item_category = input("Please enter an item category: ")
-            item_id = input("Please enter an item ID: ")
             item_keywords = input("Please enter item keywords: ")
             item_condition = input("Please enter the item's condition: ")
             if(item_condition.lower() == "new" ):
@@ -40,8 +39,8 @@ if __name__ == "__main__":
             else:
                 item_condition = "False"
             item_price = input("Please enter the price of the item: ")
-            message = "sell\n" + item_name + "\n" + item_category + "\n" + item_id \
-                    + "\n" + item_keywords + "\n" + item_condition + "\n" + item_price
+            message = "sell\n" + item_name + "\n" + item_category + "\n" + item_keywords \
+                    + "\n" + item_condition + "\n" + item_price + "\n" + str(COOKIE_ID)
 
         elif(message == "modify"):
             item_id = input("Please enter the item ID: ")
@@ -54,7 +53,7 @@ if __name__ == "__main__":
             message = "remove\n" + item_id + "\n" + item_quantity
 
         elif(message == "list"):
-            message = "list"
+            message = "list\n" + str(COOKIE_ID)
 
         elif(message == "create"):
             username = input("Enter a username: ")

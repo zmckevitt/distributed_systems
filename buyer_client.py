@@ -41,18 +41,18 @@ if __name__ == "__main__":
         elif(message == "add"):
             item_id = input("Please enter an item ID: ")
             item_quantity = input("Please enter an item quantity: ")
-            message = "add\n" + item_id + "\n" + item_quantity
+            message = "add\n" + item_id + "\n" + item_quantity + "\n" + str(COOKIE_ID)
 
         elif(message == "remove"):
             item_id = input("Please enter an item ID: ")
             item_quantity = input("Please enter an item quantity: ")
-            message = "remove\n" + item_id + "\n" + item_quantity
+            message = "remove\n" + item_id + "\n" + item_quantity + "\n" + str(COOKIE_ID)
 
         elif(message == "clear"):
-            message = "clear"
+            message = "clear\n" + str(COOKIE_ID)
 
         elif(message == "display"):
-            message = "display"
+            message = "display\n" + str(COOKIE_ID)
 
         elif(message == "create"):
             username = input("Enter a username: ")
@@ -75,16 +75,34 @@ if __name__ == "__main__":
             COOKIE_ID = -1
 
         elif(message == "purchase"):
-            pass
+
+            name = input("Enter name on card: ")
+            number = input("Enter card number: ")
+            expiration = input("Enter card expiration: ")
+
+            message = "purchase\n" + name + "\n" + number + "\n" \
+                    + expiration + "\n" + str(COOKIE_ID)
 
         elif(message == "feedback"):
-            pass
+
+            item_id = input("Please provide an ID for an item you've purchased: ")
+            item_review = input("Was the item (good) or (bad)? ")
+
+            if(item_review.lower() == "good" ):
+                item_review = "True"
+            else:
+                item_review = "False"
+
+            message = "feedback\n" + item_id + "\n" + item_review + "\n" + str(COOKIE_ID)
 
         elif(message == "rating"):
-            pass
+
+            # Writeup says to provide BUYER id, but I assume it means SELLER id
+            s_id = input("Please provide a seller ID: ")
+            message = "rating\n" + s_id + "\n" + str(COOKIE_ID)
 
         elif(message == "history"):
-            pass
+            message = "history\n" + str(COOKIE_ID)
 
         else:
             print("Please enter a valid message.")
@@ -105,5 +123,5 @@ if __name__ == "__main__":
 
         else:
             print(data)
-        
+
         print("(Took " + str(time_2-time_1) + " seconds)")
