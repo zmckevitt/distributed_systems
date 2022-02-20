@@ -64,6 +64,31 @@ This will create a table called ```products``` in the ```product``` database wit
 
 This will create a table called ```cart``` with columns id and quantity
 
+To create the customers database, use the following command in MySQL:
+
+```CREATE DATABASE customer;```
+
+To create a table for user information (both buyer and seller), issue the following create table command:
+
+```CREATE TABLE customer.users (name VARCHAR(32), id INT, nitems INT);```
+
+Next, we need to add a ratings table for feedback:
+
+```CREATE TABLE customer.feedback (id INT, pos INT, neg INT);```
+
+A passwords table:
+
+```CREATE TABLE customer.passwords (id INT, password VARCHAR(32));```
+
+A buyer history table:
+
+```TBD```
+
+Lastly, we need a table to keep track of users currently logged in:
+
+```CREATE TABLE customer.logged (id INT, logged BOOL);```
+
+
 ## Timing Benchmarks
 
 We determined timing benchmarks entirely client-side, measuring the timing difference between the sending of the command and the receiving of the response. We tested these benchmarks in two scenarios: communications between two processes on the same machine and communications between two different machines on the same LAN.

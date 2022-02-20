@@ -13,6 +13,13 @@ prod_db = mysql.connector.connect(
     database="product"
 )
 
+cus_db = mysql.connector.connect(
+    host="localhost",
+    user="prod",
+    password="prodpassword",
+    database="customer"
+)
+
 
 # Handler for new connection
 # Connects to database to run commands
@@ -25,6 +32,7 @@ def thread_handler(conn):
         command = tokens[0]
 
         data = ""
+
         if command == "search":
             sql_query = "SELECT * FROM products " \
                         "WHERE category = " + tokens[1]+" AND keywords LIKE '%" + tokens[2] + "%';"
@@ -37,6 +45,7 @@ def thread_handler(conn):
             if len(data) == 0:
                 data = "No matching data found."
             print(data)
+
         elif command == "add":
             pre_query = "SELECT id FROM cart WHERE id = "+tokens[1] + ";"
             db_cursor.execute(pre_query)
@@ -59,6 +68,7 @@ def thread_handler(conn):
                 else:
                     data = "Item could not be added"
             prod_db.commit()
+
         elif command == "remove":
             sql_query = "UPDATE cart SET quantity = quantity-" + tokens[2] \
                         + " WHERE id = " + tokens[1] + " AND quantity-" + tokens[2] + ">=0;"
@@ -69,6 +79,7 @@ def thread_handler(conn):
                 data = "Item(s) removed successfully."
             else:
                 data = "Item(s) could not be removed"
+
         elif command == "clear":
             sql_query = "DELETE FROM cart;"
             print(sql_query)
@@ -78,6 +89,7 @@ def thread_handler(conn):
                 data = "Cart cleared successfully."
             else:
                 data = "Cart could not be cleared"
+
         elif command == "display":
             sql_query = "SELECT * FROM cart;"
             db_cursor.execute(sql_query)
@@ -88,6 +100,107 @@ def thread_handler(conn):
             if len(data) == 0:
                 data = "Your cart is empty."
             print(data)
+
+        elif command == "create":
+            # TODO: handle collisions?
+            #       Username + password combo already exists?
+
+            # get current highest user ID
+            cus_cursor.execute("SELECT MAX(id) FROM customer.users;")
+            data = ""
+
+            new_id = 0
+            for x in cus_cursor:
+                if(isinstance(x[0], int)):
+                    new_id = x[0]+1
+
+
+            sql_query = "INSERT INTO users " \
+                        + "(name, id, nitems) " \
+                        + "VALUES " \
+                        + "(\"" + tokens[1] + "\", " + str(new_id) + ", " + "0);"
+
+            cus_cursor.execute(sql_query)
+
+            sql_query = "INSERT INTO passwords "\
+                        + "(id, password) " \
+                        + "VALUES " \
+                        + "(" + str(new_id) + ", " + "\"" + tokens[2] + "\")"
+
+            cus_cursor.execute(sql_query)
+
+            sql_query = "INSERT INTO feedback "\
+                        + "(id, pos, neg) " \
+                        + "VALUES " \
+                        + "(" + str(new_id) + ", 0, 0);"
+
+            cus_cursor.execute(sql_query)
+
+
+            # logged table might be useless if we are using client side cookies to track login
+            sql_query = "INSERT INTO logged "\
+                        + "(id, logged) " \
+                        + "VALUES " \
+                        + "(" + str(new_id) + ", 0);"
+
+            cus_cursor.execute(sql_query)
+
+            data = "Customer added successfully."
+            cus_db.commit()
+
+        elif command == "login":
+
+            username = tokens[1]
+            password = tokens[2]
+
+            # join passwords to users on ID
+            # select user id that matches both username and password
+            sql_query = "SELECT users.id FROM users " \
+                        + "INNER JOIN passwords ON users.id=passwords.id " \
+                        + "WHERE passwords.password = \"" + password + "\" " \
+                        + "and users.name = \"" + username +"\";"
+
+            cus_cursor.execute(sql_query)
+
+            # get the returned user id
+            # u_id will be -1 if no matching user is found
+            u_id = -1
+            for x in cus_cursor:
+                if(isinstance(x[0], int)):
+                    u_id = x[0]
+
+
+            # if user exists, set their status to logged in
+            if(u_id != -1):
+                sql_query = "UPDATE logged SET logged=1 WHERE id=" + str(u_id) + ";"
+                cus_cursor.execute(sql_query)
+
+            cus_db.commit()
+            data = str(u_id)
+
+        elif command == "logout":
+            
+            u_id = tokens[1]
+            if(int(u_id) == -1):
+                data = "User is not logged in."
+            else:
+                sql_query = "UPDATE logged SET logged=0 WHERE id=" + u_id + ";"
+                cus_cursor.execute(sql_query)
+                cus_db.commit()
+                data = "Logged out."
+
+        elif command == "purchase":
+            pass
+
+        elif command == "feedback":
+            pass
+
+        elif command == "rating":
+            pass
+
+        elif command == "history":
+            pass
+
         else:
             data = "ERROR"
 
@@ -104,6 +217,7 @@ def thread_handler(conn):
 if __name__ == "__main__":
 
     db_cursor = prod_db.cursor(buffered=True)
+    cus_cursor = cus_db.cursor(buffered=True)
 
     if (len(sys.argv) < 2):
         print("Usage: %s <port>" % sys.argv[0])
