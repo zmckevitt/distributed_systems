@@ -37,7 +37,7 @@ class marketplaceStub(object):
         self.search = channel.unary_unary(
                 '/marketplacePackage.marketplace/search',
                 request_serializer=marketplace__pb2.SearchRequest.SerializeToString,
-                response_deserializer=marketplace__pb2.SearchResponse.FromString,
+                response_deserializer=marketplace__pb2.Response.FromString,
                 )
         self.add = channel.unary_unary(
                 '/marketplacePackage.marketplace/add',
@@ -87,6 +87,11 @@ class marketplaceStub(object):
         self.history = channel.unary_unary(
                 '/marketplacePackage.marketplace/history',
                 request_serializer=marketplace__pb2.HistoryRequest.SerializeToString,
+                response_deserializer=marketplace__pb2.Response.FromString,
+                )
+        self.rating = channel.unary_unary(
+                '/marketplacePackage.marketplace/rating',
+                request_serializer=marketplace__pb2.RatingRequest.SerializeToString,
                 response_deserializer=marketplace__pb2.Response.FromString,
                 )
 
@@ -184,6 +189,12 @@ class marketplaceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def rating(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_marketplaceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -210,7 +221,7 @@ def add_marketplaceServicer_to_server(servicer, server):
             'search': grpc.unary_unary_rpc_method_handler(
                     servicer.search,
                     request_deserializer=marketplace__pb2.SearchRequest.FromString,
-                    response_serializer=marketplace__pb2.SearchResponse.SerializeToString,
+                    response_serializer=marketplace__pb2.Response.SerializeToString,
             ),
             'add': grpc.unary_unary_rpc_method_handler(
                     servicer.add,
@@ -260,6 +271,11 @@ def add_marketplaceServicer_to_server(servicer, server):
             'history': grpc.unary_unary_rpc_method_handler(
                     servicer.history,
                     request_deserializer=marketplace__pb2.HistoryRequest.FromString,
+                    response_serializer=marketplace__pb2.Response.SerializeToString,
+            ),
+            'rating': grpc.unary_unary_rpc_method_handler(
+                    servicer.rating,
+                    request_deserializer=marketplace__pb2.RatingRequest.FromString,
                     response_serializer=marketplace__pb2.Response.SerializeToString,
             ),
     }
@@ -353,7 +369,7 @@ class marketplace(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/search',
             marketplace__pb2.SearchRequest.SerializeToString,
-            marketplace__pb2.SearchResponse.FromString,
+            marketplace__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -523,6 +539,23 @@ class marketplace(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/history',
             marketplace__pb2.HistoryRequest.SerializeToString,
+            marketplace__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def rating(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/rating',
+            marketplace__pb2.RatingRequest.SerializeToString,
             marketplace__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

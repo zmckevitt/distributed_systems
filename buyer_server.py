@@ -15,14 +15,13 @@ def index():
 
 @app.route('/cart/searchProduct', methods = ['POST'])
 def search_products():
-    cat_str = request.form.get('id')
-    keywords = request.form.get('quantity')
-    category = int(cat_str)
+    category = int(request.form.get('category'))
+    keywords = request.form.get('keywords')
     print("category = ",category,"keywords = ", keywords)
     bs = BuyerServer()
     res = bs.search_products(category, keywords)
     print("Response = ", res)
-    return res
+    return str(res)
 
 @app.route('/cart/addItem', methods = ['POST'])
 def add_to_cart():
@@ -36,7 +35,7 @@ def add_to_cart():
     bs = BuyerServer()
     res = bs.add_to_cart(item_id, u_id, quantity)
     print("Response = ", res)
-    return res
+    return str(res)
 
 @app.route('/cart/removeItem', methods = ['POST'])
 def remove_from_cart():
@@ -50,25 +49,25 @@ def remove_from_cart():
     bs = BuyerServer()
     res = bs.remove_from_cart(item_id, u_id, quantity)
     print("Response  = ", res)
-    return res
+    return str(res)
 
-@app.route('/cart/clear', methods = ['GET'])
+@app.route('/cart/clear', methods = ['POST'])
 def clear_cart():
     u_id_str = request.form.get('u_id')
     u_id = int(u_id_str)
     bs = BuyerServer()
     res = bs.clear_cart(u_id)
     print("Response = ", res)
-    return res
+    return str(res)
 
-@app.route('/cart/display', methods = ['GET'])
+@app.route('/cart/display', methods = ['POST'])
 def display_cart():
     u_id_str = request.form.get('u_id')
     u_id = int(u_id_str)
     bs = BuyerServer()
     res = bs.display_cart(u_id)
     print("Response = ", res)
-    return res
+    return str(res)
 
 @app.route('/user/createUser', methods = ['POST'])
 def create_user():
@@ -77,7 +76,7 @@ def create_user():
     bs = BuyerServer()
     res = bs.create_user(username, password)
     print("Response = ", res)
-    return res
+    return str(res)
 
 @app.route('/user/login', methods = ['POST'])
 def login():
@@ -86,54 +85,53 @@ def login():
     bs = BuyerServer()
     res = bs.login(username, password)
     print("Response = ", res)
-    return res
+    return str(res)
 
 @app.route('/user/logout', methods = ['POST'])
 def logout():
-    cookie = request.form.get('cookie')
+    u_id = int(request.form.get('u_id'))
     bs = BuyerServer()
-    res = bs.logout(cookie)
+    res = bs.logout(u_id)
     print("Response = ", res)
-    return res
+    return str(res)
 
 @app.route('/purchase', methods = ['POST'])
 def purchase():
     name = request.form.get('name')
     number = request.form.get('number')
     expiration = request.form.get('expiration')
+    u_id = int(request.form.get('u_id'))
     bs = BuyerServer()
-    res = bs.purchase(name, number, expiration)
+    res = bs.purchase(name, number, expiration, u_id)
     print("Response = ", res)
-    return res
+    return str(res)
 
 @app.route('/feedback', methods = ['POST'])
 def feedback():
     item_id_str = request.form.get('item_id')
     item_id = int(item_id_str)
     item_review = request.form.get('item_review')
-    cookie = request.form.get('cookie')
+    u_id = int(request.form.get('u_id'))
     bs = BuyerServer()
-    res = bs.feedback(item_id, item_review, cookie)
+    res = bs.feedback(item_id, item_review, u_id)
     print("Response = ", res)
-    return res
+    return str(res)
 
 @app.route('/rating', methods = ['POST'])
 def rating():
-    seller_id_str = request.form.get('seller_id')
-    seller_id = int(seller_id_str)
-    cookie = request.form.get('cookie')
+    s_id = int(request.form.get('s_id'))
     bs = BuyerServer()
-    res = bs.rating(seller_id, cookie)
+    res = bs.rating(s_id)
     print("Response = ", res)
-    return res
+    return str(res)
 
 @app.route('/history', methods = ['POST'])
 def history():
-    cookie = request.form.get('cookie')
+    u_id = int(request.form.get('u_id'))
     bs = BuyerServer()
-    res = bs.rating(cookie)
+    res = bs.history(u_id)
     print("Response = ", res)
-    return res
+    return str(res)
 
 
 
@@ -155,7 +153,7 @@ class BuyerServer():
         req = message.ItemRequest(item_id=item_id, u_id=u_id, quantity=quantity)
         return self.stub.add(req)
 
-    def remove_from_cart(self, id, quantity):
+    def remove_from_cart(self, item_id, u_id, quantity):
         req = message.ItemRequest(item_id=item_id, u_id=u_id, quantity=quantity)
         return self.stub.remove(req)
 
@@ -175,24 +173,24 @@ class BuyerServer():
         req = message.LoginRequest(username=username, password=password)
         return self.stub.login(req)
 
-    def logout(self, cookie):
-        req = message.LogoutRequest(cookie=cookie)
+    def logout(self, u_id):
+        req = message.LogoutRequest(u_id=u_id)
         return self.stub.logout(req)
     
-    def purchase(self, name, number, expiration):
-        req = message.PurchaseRequest(name=name, number=number, expiration=expiration)
+    def purchase(self, name, number, expiration, u_id):
+        req = message.PurchaseRequest(name=name, number=number, expiration=expiration, u_id=u_id)
         return self.stub.purchase(req)
     
-    def feedback(self, item_id, item_review, cookie):
-        req = message.FeedbackRequest(item_id=item_id, item_review=item_review, cookie=cookie)
+    def feedback(self, item_id, item_review, u_id):
+        req = message.FeedbackRequest(item_id=item_id, item_review=item_review, u_id=u_id)
         return self.stub.feedback(req)
 
-    def rating(self, seller_id, cookie):
-        req = message.RatingRequest(seller_id=seller_id, cookie=cookie)
+    def rating(self, s_id):
+        req = message.RatingRequest(s_id=s_id)
         return self.stub.rating(req)
 
-    def history(self, cookie):
-        req = message.HistoryRequest(cookie=cookie)
+    def history(self, u_id):
+        req = message.HistoryRequest(u_id=u_id)
         return self.stub.history(req)
 
 

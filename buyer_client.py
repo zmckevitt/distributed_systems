@@ -35,7 +35,11 @@ if __name__ == "__main__":
         if(message == "search"):
             search_category = input("Please enter search category: ")
             search_keywords = input("Please enter up to five keywords: ")
-            message = "search\n" + search_category + "\n" + search_keywords
+            data = {"category": int(search_category), "keywords":search_keywords}
+            url = "http://localhost:5000/cart/searchProduct"
+            response = reqs.post(url, data)
+            print(response.status_code)
+            print(response.text)
 
         elif(message == "add"):
             item_id = input("Please enter an item ID: ")
@@ -49,21 +53,23 @@ if __name__ == "__main__":
         elif(message == "remove"):
             item_id = input("Please enter an item ID: ")
             item_quantity = input("Please enter an item quantity: ")
-            data = {"id": item_id, "u_id": COOKIE_ID, "quantity": item_quantity}
+            data = {"item_id": item_id, "u_id": COOKIE_ID, "quantity": item_quantity}
             url = "http://localhost:5000/cart/removeItem"
             response = reqs.post(url, data)
             print(response.status_code)
             print(response.text)
 
         elif(message == "clear"):
+            data = {"u_id" : COOKIE_ID}
             url = "http://localhost:5000/cart/clear"
-            response = reqs.get(url)
+            response = reqs.post(url, data)
             print(response.status_code)
             print(response.text)
 
         elif(message == "display"):
+            data = {"u_id" : COOKIE_ID}
             url = "http://localhost:5000/cart/display"
-            response = reqs.get(url)
+            response = reqs.post(url, data)
             print(response.status_code)
             print(response.text)
 
@@ -89,9 +95,14 @@ if __name__ == "__main__":
             print(response.status_code)
             print(response.text)
 
+            COOKIE_ID = int(response.text[7:-2])
+            if(COOKIE_ID != -1):
+                print("Logged in with u_id: " + str(COOKIE_ID))
+            else:
+                print("Login failed.")
+
         elif(message == "logout"):
-            message = "logout\n" + str(COOKIE_ID)
-            data = {"cookie": str(COOKIE_ID)}
+            data = {"u_id": COOKIE_ID}
             url = "http://localhost:5000/user/logout"
             response = reqs.post(url, data)
             print(response.status_code)
@@ -104,7 +115,7 @@ if __name__ == "__main__":
             number = input("Enter card number: ")
             expiration = input("Enter card expiration: ")
 
-            data = {"name": name, "number": number, "expiration": expiration}
+            data = {"name": name, "number": number, "expiration": expiration, 'u_id' : COOKIE_ID}
             url = "http://localhost:5000/purchase"
             response = reqs.post(url, data)
             print(response.status_code)
@@ -120,7 +131,7 @@ if __name__ == "__main__":
             else:
                 item_review = "False"
 
-            data = {"item_id": item_id, "item_review": item_review, "cookie": str(COOKIE_ID)}
+            data = {"item_id": item_id, "item_review": item_review, "u_id": COOKIE_ID}
             url = "http://localhost:5000/feedback"
             response = reqs.post(url, data)
             print(response.status_code)
@@ -131,14 +142,14 @@ if __name__ == "__main__":
             # Writeup says to provide BUYER id, but I assume it means SELLER id
             s_id = input("Please provide a seller ID: ")
 
-            data = {"seller_id": s_id, "cookie": str(COOKIE_ID)}
+            data = {"s_id": s_id}
             url = "http://localhost:5000/rating"
             response = reqs.post(url, data)
             print(response.status_code)
             print(response.text)
 
         elif (message == "history"):
-            data = {"cookie": str(COOKIE_ID)}
+            data = {"u_id": COOKIE_ID}
             url = "http://localhost:5000/history"
             response = reqs.post(url, data)
             print(response.status_code)
@@ -148,19 +159,19 @@ if __name__ == "__main__":
             print("Please enter a valid message.")
             continue
 
-        time_1 = time.time()
-        time_2 = time.time()
-        #data = data.decode('utf-8')
+        # time_1 = time.time()
+        # time_2 = time.time()
+        # #data = data.decode('utf-8')
 
-        if (set_cookie):
-            COOKIE_ID = int(data)
-            if (COOKIE_ID != -1):
-                print("Logged in with UID: " + str(COOKIE_ID))
-            else:
-                print("Invalid username or password.")
+        # if (set_cookie):
+        #     COOKIE_ID = int(data)
+        #     if (COOKIE_ID != -1):
+        #         print("Logged in with UID: " + str(COOKIE_ID))
+        #     else:
+        #         print("Invalid username or password.")
 
-        else:
-            print(data)
+        # else:
+        #     print(data)
 
-        print("(Took " + str(time_2 - time_1) + " seconds)")
+        # print("(Took " + str(time_2 - time_1) + " seconds)")
 

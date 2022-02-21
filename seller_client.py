@@ -1,6 +1,6 @@
 import sys
-import socket
 import time
+import requests as reqs
 
 SERVER_IP = "127.0.0.1"
 SERVER_PORT = 8080
@@ -44,7 +44,7 @@ if __name__ == "__main__":
                     "category": item_category,
                     "keywords" : item_keywords,
                     "condition": item_condition,
-                    "price" : item_price
+                    "price" : item_price,
                     "cookie": str(COOKIE_ID)}
             url = "http://localhost:5000/products/sell"
             response = reqs.post(url, data)

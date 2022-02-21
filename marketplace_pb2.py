@@ -14,10 +14,11 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11marketplace.proto\x12\x12marketplacePackage\"n\n\x08ListItem\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08\x63\x61tegory\x18\x02 \x01(\x05\x12\x10\n\x08keywords\x18\x03 \x01(\t\x12\x11\n\tcondition\x18\x04 \x01(\x08\x12\r\n\x05price\x18\x05 \x01(\x02\x12\x0e\n\x06\x63ookie\x18\x06 \x01(\x05\"6\n\tPriceItem\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05price\x18\x02 \x01(\x02\x12\x0e\n\x06\x63ookie\x18\x03 \x01(\x05\":\n\nRemoveItem\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x10\n\x08quantity\x18\x02 \x01(\x05\x12\x0e\n\x06\x63ookie\x18\x03 \x01(\x05\"\x1d\n\x0bListRequest\x12\x0e\n\x06\x63ookie\x18\x01 \x01(\x05\"3\n\rSearchRequest\x12\x10\n\x08\x63\x61tegory\x18\x01 \x01(\x05\x12\x10\n\x08keywords\x18\x02 \x01(\t\"1\n\x0bUserRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"2\n\x0cLoginRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"\x1f\n\rLogoutRequest\x12\x0e\n\x06\x63ookie\x18\x01 \x01(\x05\"C\n\x0fPurchaseRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06number\x18\x02 \x01(\t\x12\x12\n\nexpiration\x18\x03 \x01(\t\"B\n\x0f\x46\x65\x65\x64\x62\x61\x63kRequest\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x13\n\x0bitem_review\x18\x02 \x01(\t\x12\x0e\n\x06\x63ookie\x18\x03 \x01(\x05\"2\n\rRatingRequest\x12\x11\n\tseller_id\x18\x01 \x01(\x05\x12\x0e\n\x06\x63ookie\x18\x02 \x01(\x05\" \n\x0eHistoryRequest\x12\x0e\n\x06\x63ookie\x18\x01 \x01(\x05\"\x18\n\x08Response\x12\x0c\n\x04text\x18\x01 \x01(\t\">\n\x0bItemRequest\x12\x0f\n\x07item_id\x18\x01 \x01(\x05\x12\x0c\n\x04u_id\x18\x02 \x01(\x05\x12\x10\n\x08quantity\x18\x03 \x01(\x05\"9\n\x04Item\x12\x0f\n\x07item_id\x18\x01 \x01(\x05\x12\x10\n\x08quantity\x18\x02 \x01(\x05\x12\x0e\n\x06\x63ookie\x18\x03 \x01(\x05\"9\n\x0eSearchResponse\x12\'\n\x05Items\x18\x01 \x03(\x0b\x32\x18.marketplacePackage.Item\"\x1a\n\nRequestUid\x12\x0c\n\x04u_id\x18\x01 \x01(\x05\"\x06\n\x04void2\xea\x08\n\x0bmarketplace\x12\x42\n\x04sell\x12\x1c.marketplacePackage.ListItem\x1a\x1c.marketplacePackage.Response\x12\x45\n\x06modify\x12\x1d.marketplacePackage.PriceItem\x1a\x1c.marketplacePackage.Response\x12M\n\rremoveListing\x12\x1e.marketplacePackage.RemoveItem\x1a\x1c.marketplacePackage.Response\x12\x45\n\x04list\x12\x1f.marketplacePackage.ListRequest\x1a\x1c.marketplacePackage.Response\x12O\n\x06search\x12!.marketplacePackage.SearchRequest\x1a\".marketplacePackage.SearchResponse\x12\x44\n\x03\x61\x64\x64\x12\x1f.marketplacePackage.ItemRequest\x1a\x1c.marketplacePackage.Response\x12G\n\x06remove\x12\x1f.marketplacePackage.ItemRequest\x1a\x1c.marketplacePackage.Response\x12\x45\n\x05\x63lear\x12\x1e.marketplacePackage.RequestUid\x1a\x1c.marketplacePackage.Response\x12G\n\x07\x64isplay\x12\x1e.marketplacePackage.RequestUid\x1a\x1c.marketplacePackage.Response\x12K\n\ncreateUser\x12\x1f.marketplacePackage.UserRequest\x1a\x1c.marketplacePackage.Response\x12G\n\x05login\x12 .marketplacePackage.LoginRequest\x1a\x1c.marketplacePackage.Response\x12I\n\x06logout\x12!.marketplacePackage.LogoutRequest\x1a\x1c.marketplacePackage.Response\x12M\n\x08purchase\x12#.marketplacePackage.PurchaseRequest\x1a\x1c.marketplacePackage.Response\x12M\n\x08\x66\x65\x65\x64\x62\x61\x63k\x12#.marketplacePackage.FeedbackRequest\x1a\x1c.marketplacePackage.Response\x12K\n\x07history\x12\".marketplacePackage.HistoryRequest\x1a\x1c.marketplacePackage.Responseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11marketplace.proto\x12\x12marketplacePackage\"\x1d\n\rRatingRequest\x12\x0c\n\x04s_id\x18\x01 \x01(\x05\"l\n\x08ListItem\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08\x63\x61tegory\x18\x02 \x01(\x05\x12\x10\n\x08keywords\x18\x03 \x01(\t\x12\x11\n\tcondition\x18\x04 \x01(\x08\x12\r\n\x05price\x18\x05 \x01(\x02\x12\x0c\n\x04u_id\x18\x06 \x01(\x05\"4\n\tPriceItem\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05price\x18\x02 \x01(\x02\x12\x0c\n\x04u_id\x18\x03 \x01(\x05\"8\n\nRemoveItem\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x10\n\x08quantity\x18\x02 \x01(\x05\x12\x0c\n\x04u_id\x18\x03 \x01(\x05\"\x1b\n\x0bListRequest\x12\x0c\n\x04u_id\x18\x01 \x01(\x05\"3\n\rSearchRequest\x12\x10\n\x08\x63\x61tegory\x18\x01 \x01(\x05\x12\x10\n\x08keywords\x18\x02 \x01(\t\"1\n\x0bUserRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"2\n\x0cLoginRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"\x1d\n\rLogoutRequest\x12\x0c\n\x04u_id\x18\x01 \x01(\x05\"Q\n\x0fPurchaseRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06number\x18\x02 \x01(\t\x12\x12\n\nexpiration\x18\x03 \x01(\t\x12\x0c\n\x04u_id\x18\x04 \x01(\x05\"E\n\x0f\x46\x65\x65\x64\x62\x61\x63kRequest\x12\x0f\n\x07item_id\x18\x01 \x01(\x05\x12\x13\n\x0bitem_review\x18\x02 \x01(\t\x12\x0c\n\x04u_id\x18\x03 \x01(\x05\"\x1e\n\x0eHistoryRequest\x12\x0c\n\x04u_id\x18\x01 \x01(\x05\"\x18\n\x08Response\x12\x0c\n\x04text\x18\x01 \x01(\t\">\n\x0bItemRequest\x12\x0f\n\x07item_id\x18\x01 \x01(\x05\x12\x0c\n\x04u_id\x18\x02 \x01(\x05\x12\x10\n\x08quantity\x18\x03 \x01(\x05\"7\n\x04Item\x12\x0f\n\x07item_id\x18\x01 \x01(\x05\x12\x10\n\x08quantity\x18\x02 \x01(\x05\x12\x0c\n\x04u_id\x18\x03 \x01(\x05\"9\n\x0eSearchResponse\x12\'\n\x05Items\x18\x01 \x03(\x0b\x32\x18.marketplacePackage.Item\"\x1a\n\nRequestUid\x12\x0c\n\x04u_id\x18\x01 \x01(\x05\"\x06\n\x04void2\xaf\t\n\x0bmarketplace\x12\x42\n\x04sell\x12\x1c.marketplacePackage.ListItem\x1a\x1c.marketplacePackage.Response\x12\x45\n\x06modify\x12\x1d.marketplacePackage.PriceItem\x1a\x1c.marketplacePackage.Response\x12M\n\rremoveListing\x12\x1e.marketplacePackage.RemoveItem\x1a\x1c.marketplacePackage.Response\x12\x45\n\x04list\x12\x1f.marketplacePackage.ListRequest\x1a\x1c.marketplacePackage.Response\x12I\n\x06search\x12!.marketplacePackage.SearchRequest\x1a\x1c.marketplacePackage.Response\x12\x44\n\x03\x61\x64\x64\x12\x1f.marketplacePackage.ItemRequest\x1a\x1c.marketplacePackage.Response\x12G\n\x06remove\x12\x1f.marketplacePackage.ItemRequest\x1a\x1c.marketplacePackage.Response\x12\x45\n\x05\x63lear\x12\x1e.marketplacePackage.RequestUid\x1a\x1c.marketplacePackage.Response\x12G\n\x07\x64isplay\x12\x1e.marketplacePackage.RequestUid\x1a\x1c.marketplacePackage.Response\x12K\n\ncreateUser\x12\x1f.marketplacePackage.UserRequest\x1a\x1c.marketplacePackage.Response\x12G\n\x05login\x12 .marketplacePackage.LoginRequest\x1a\x1c.marketplacePackage.Response\x12I\n\x06logout\x12!.marketplacePackage.LogoutRequest\x1a\x1c.marketplacePackage.Response\x12M\n\x08purchase\x12#.marketplacePackage.PurchaseRequest\x1a\x1c.marketplacePackage.Response\x12M\n\x08\x66\x65\x65\x64\x62\x61\x63k\x12#.marketplacePackage.FeedbackRequest\x1a\x1c.marketplacePackage.Response\x12K\n\x07history\x12\".marketplacePackage.HistoryRequest\x1a\x1c.marketplacePackage.Response\x12I\n\x06rating\x12!.marketplacePackage.RatingRequest\x1a\x1c.marketplacePackage.Responseb\x06proto3')
 
 
 
+_RATINGREQUEST = DESCRIPTOR.message_types_by_name['RatingRequest']
 _LISTITEM = DESCRIPTOR.message_types_by_name['ListItem']
 _PRICEITEM = DESCRIPTOR.message_types_by_name['PriceItem']
 _REMOVEITEM = DESCRIPTOR.message_types_by_name['RemoveItem']
@@ -28,7 +29,6 @@ _LOGINREQUEST = DESCRIPTOR.message_types_by_name['LoginRequest']
 _LOGOUTREQUEST = DESCRIPTOR.message_types_by_name['LogoutRequest']
 _PURCHASEREQUEST = DESCRIPTOR.message_types_by_name['PurchaseRequest']
 _FEEDBACKREQUEST = DESCRIPTOR.message_types_by_name['FeedbackRequest']
-_RATINGREQUEST = DESCRIPTOR.message_types_by_name['RatingRequest']
 _HISTORYREQUEST = DESCRIPTOR.message_types_by_name['HistoryRequest']
 _RESPONSE = DESCRIPTOR.message_types_by_name['Response']
 _ITEMREQUEST = DESCRIPTOR.message_types_by_name['ItemRequest']
@@ -36,6 +36,13 @@ _ITEM = DESCRIPTOR.message_types_by_name['Item']
 _SEARCHRESPONSE = DESCRIPTOR.message_types_by_name['SearchResponse']
 _REQUESTUID = DESCRIPTOR.message_types_by_name['RequestUid']
 _VOID = DESCRIPTOR.message_types_by_name['void']
+RatingRequest = _reflection.GeneratedProtocolMessageType('RatingRequest', (_message.Message,), {
+  'DESCRIPTOR' : _RATINGREQUEST,
+  '__module__' : 'marketplace_pb2'
+  # @@protoc_insertion_point(class_scope:marketplacePackage.RatingRequest)
+  })
+_sym_db.RegisterMessage(RatingRequest)
+
 ListItem = _reflection.GeneratedProtocolMessageType('ListItem', (_message.Message,), {
   'DESCRIPTOR' : _LISTITEM,
   '__module__' : 'marketplace_pb2'
@@ -106,13 +113,6 @@ FeedbackRequest = _reflection.GeneratedProtocolMessageType('FeedbackRequest', (_
   })
 _sym_db.RegisterMessage(FeedbackRequest)
 
-RatingRequest = _reflection.GeneratedProtocolMessageType('RatingRequest', (_message.Message,), {
-  'DESCRIPTOR' : _RATINGREQUEST,
-  '__module__' : 'marketplace_pb2'
-  # @@protoc_insertion_point(class_scope:marketplacePackage.RatingRequest)
-  })
-_sym_db.RegisterMessage(RatingRequest)
-
 HistoryRequest = _reflection.GeneratedProtocolMessageType('HistoryRequest', (_message.Message,), {
   'DESCRIPTOR' : _HISTORYREQUEST,
   '__module__' : 'marketplace_pb2'
@@ -166,42 +166,42 @@ _MARKETPLACE = DESCRIPTOR.services_by_name['marketplace']
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _LISTITEM._serialized_start=41
-  _LISTITEM._serialized_end=151
-  _PRICEITEM._serialized_start=153
-  _PRICEITEM._serialized_end=207
-  _REMOVEITEM._serialized_start=209
-  _REMOVEITEM._serialized_end=267
-  _LISTREQUEST._serialized_start=269
-  _LISTREQUEST._serialized_end=298
-  _SEARCHREQUEST._serialized_start=300
-  _SEARCHREQUEST._serialized_end=351
-  _USERREQUEST._serialized_start=353
-  _USERREQUEST._serialized_end=402
-  _LOGINREQUEST._serialized_start=404
-  _LOGINREQUEST._serialized_end=454
-  _LOGOUTREQUEST._serialized_start=456
-  _LOGOUTREQUEST._serialized_end=487
-  _PURCHASEREQUEST._serialized_start=489
-  _PURCHASEREQUEST._serialized_end=556
-  _FEEDBACKREQUEST._serialized_start=558
-  _FEEDBACKREQUEST._serialized_end=624
-  _RATINGREQUEST._serialized_start=626
-  _RATINGREQUEST._serialized_end=676
-  _HISTORYREQUEST._serialized_start=678
-  _HISTORYREQUEST._serialized_end=710
-  _RESPONSE._serialized_start=712
-  _RESPONSE._serialized_end=736
-  _ITEMREQUEST._serialized_start=738
-  _ITEMREQUEST._serialized_end=800
-  _ITEM._serialized_start=802
-  _ITEM._serialized_end=859
-  _SEARCHRESPONSE._serialized_start=861
-  _SEARCHRESPONSE._serialized_end=918
-  _REQUESTUID._serialized_start=920
-  _REQUESTUID._serialized_end=946
-  _VOID._serialized_start=948
-  _VOID._serialized_end=954
-  _MARKETPLACE._serialized_start=957
-  _MARKETPLACE._serialized_end=2087
+  _RATINGREQUEST._serialized_start=41
+  _RATINGREQUEST._serialized_end=70
+  _LISTITEM._serialized_start=72
+  _LISTITEM._serialized_end=180
+  _PRICEITEM._serialized_start=182
+  _PRICEITEM._serialized_end=234
+  _REMOVEITEM._serialized_start=236
+  _REMOVEITEM._serialized_end=292
+  _LISTREQUEST._serialized_start=294
+  _LISTREQUEST._serialized_end=321
+  _SEARCHREQUEST._serialized_start=323
+  _SEARCHREQUEST._serialized_end=374
+  _USERREQUEST._serialized_start=376
+  _USERREQUEST._serialized_end=425
+  _LOGINREQUEST._serialized_start=427
+  _LOGINREQUEST._serialized_end=477
+  _LOGOUTREQUEST._serialized_start=479
+  _LOGOUTREQUEST._serialized_end=508
+  _PURCHASEREQUEST._serialized_start=510
+  _PURCHASEREQUEST._serialized_end=591
+  _FEEDBACKREQUEST._serialized_start=593
+  _FEEDBACKREQUEST._serialized_end=662
+  _HISTORYREQUEST._serialized_start=664
+  _HISTORYREQUEST._serialized_end=694
+  _RESPONSE._serialized_start=696
+  _RESPONSE._serialized_end=720
+  _ITEMREQUEST._serialized_start=722
+  _ITEMREQUEST._serialized_end=784
+  _ITEM._serialized_start=786
+  _ITEM._serialized_end=841
+  _SEARCHRESPONSE._serialized_start=843
+  _SEARCHRESPONSE._serialized_end=900
+  _REQUESTUID._serialized_start=902
+  _REQUESTUID._serialized_end=928
+  _VOID._serialized_start=930
+  _VOID._serialized_end=936
+  _MARKETPLACE._serialized_start=939
+  _MARKETPLACE._serialized_end=2138
 # @@protoc_insertion_point(module_scope)
