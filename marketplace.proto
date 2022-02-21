@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package marketplacePackage;
+
+service marketplace{
+	rpc search(SearchRequest) returns (SearchResponse);
+	rpc add(Item) returns (Response);
+	rpc remove(Item) returns (Response);
+	rpc clear(void) returns (Response);
+	rpc display(void) returns (Response);
+	rpc createUser(UserRequest) returns (Response);
+	rpc login(LoginRequest) returns (Response);
+	rpc logout(LogoutRequest) returns (Response);
+	rpc purchase(PurchaseRequest) returns (Response);
+	rpc feedback(FeedbackRequest) returns (Response);
+	rpc rating(RatingRequest) returns (Response);
+	rpc history(HistoryRequest) returns (Response);
+}
+
+message SearchRequest{
+    int32 category = 1;
+    string keywords = 2;
+}
+
+message UserRequest{
+    string username = 1;
+    string password = 2;
+}
+
+message LoginRequest{
+    string username = 1;
+    string password = 2;
+}
+
+message LogoutRequest{
+    string cookie = 1;
+}
+
+message PurchaseRequest{
+    string name = 1;
+    string number = 2;
+    string expiration = 3;
+}
+
+message FeedbackRequest{
+    int32 id = 1;
+    string item_review = 2;
+    string cookie = 3;
+}
+
+message RatingRequest{
+    int32 seller_id = 1;
+    string cookie = 2;
+}
+
+message HistoryRequest{
+    string cookie = 1;
+}
+message Response{
+	string text = 1;
+}
+
+message Item{
+	int32 id = 1;
+	int32 quantity = 2;
+}
+
+message SearchResponse{
+	repeated Item Items = 1;
+}
+message void{}

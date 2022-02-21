@@ -1,9 +1,10 @@
 import sys
-import socket
 import time
+import requests as reqs
+
 
 SERVER_IP = "127.0.0.1"
-SERVER_PORT = 8090
+SERVER_PORT = 5000
 
 # REST API allows for cookies when stored client side
 # cookie required to maintain login state
@@ -41,24 +42,41 @@ if __name__ == "__main__":
         elif(message == "add"):
             item_id = input("Please enter an item ID: ")
             item_quantity = input("Please enter an item quantity: ")
-            message = "add\n" + item_id + "\n" + item_quantity + "\n" + str(COOKIE_ID)
+            data = {"id": item_id, "quantity": item_quantity}
+            url = "http://localhost:5000/cart/addItem"
+            response = reqs.post(url, data)
+            print(response.status_code)
+            print(response.text)
 
         elif(message == "remove"):
             item_id = input("Please enter an item ID: ")
             item_quantity = input("Please enter an item quantity: ")
-            message = "remove\n" + item_id + "\n" + item_quantity + "\n" + str(COOKIE_ID)
+            data = {"id": item_id, "quantity": item_quantity}
+            url = "http://localhost:5000/cart/removeItem"
+            response = reqs.post(url, data)
+            print(response.status_code)
+            print(response.text)
 
         elif(message == "clear"):
-            message = "clear\n" + str(COOKIE_ID)
+            url = "http://localhost:5000/cart/clear"
+            response = reqs.get(url)
+            print(response.status_code)
+            print(response.text)
 
         elif(message == "display"):
-            message = "display\n" + str(COOKIE_ID)
+            url = "http://localhost:5000/cart/display"
+            response = reqs.get(url)
+            print(response.status_code)
+            print(response.text)
 
         elif(message == "create"):
             username = input("Enter a username: ")
             password = input("Enter a password: ")
-
-            message = "create\n" + username + "\n" + password
+            data = {"username": username, "password": password}
+            url = "http://localhost:5000/user/createUser"
+            response = reqs.post(url, data)
+            print(response.status_code)
+            print(response.text)
 
         elif(message == "login"):
 
@@ -67,49 +85,72 @@ if __name__ == "__main__":
 
             username = input("Enter a username: ")
             password = input("Enter a password: ")
-
-            message = "login\n" + username + "\n" + password
+            data = {"username": username, "password": password}
+            url = "http://localhost:5000/user/login"
+            response = reqs.post(url, data)
+            print(response.status_code)
+            print(response.text)
 
         elif(message == "logout"):
             message = "logout\n" + str(COOKIE_ID)
+            data = {"cookie": str(COOKIE_ID)}
+            url = "http://localhost:5000/user/logout"
+            response = reqs.post(url, data)
+            print(response.status_code)
+            print(response.text)
             COOKIE_ID = -1
 
-        elif(message == "purchase"):
+        elif (message == "purchase"):
 
             name = input("Enter name on card: ")
             number = input("Enter card number: ")
             expiration = input("Enter card expiration: ")
 
-            message = "purchase\n" + name + "\n" + number + "\n" \
-                    + expiration + "\n" + str(COOKIE_ID)
+            data = {"name": name, "number": number, "expiration": expiration}
+            url = "http://localhost:5000/purchase"
+            response = reqs.post(url, data)
+            print(response.status_code)
+            print(response.text)
 
-        elif(message == "feedback"):
+        elif (message == "feedback"):
 
             item_id = input("Please provide an ID for an item you've purchased: ")
             item_review = input("Was the item (good) or (bad)? ")
 
-            if(item_review.lower() == "good" ):
+            if (item_review.lower() == "good"):
                 item_review = "True"
             else:
                 item_review = "False"
 
-            message = "feedback\n" + item_id + "\n" + item_review + "\n" + str(COOKIE_ID)
+            data = {"item_id": item_id, "item_review": item_review, "cookie": str(COOKIE_ID)}
+            url = "http://localhost:5000/feedback"
+            response = reqs.post(url, data)
+            print(response.status_code)
+            print(response.text)
 
-        elif(message == "rating"):
+        elif (message == "rating"):
 
             # Writeup says to provide BUYER id, but I assume it means SELLER id
             s_id = input("Please provide a seller ID: ")
-            message = "rating\n" + s_id + "\n" + str(COOKIE_ID)
 
-        elif(message == "history"):
-            message = "history\n" + str(COOKIE_ID)
+            data = {"seller_id": s_id, "cookie": str(COOKIE_ID)}
+            url = "http://localhost:5000/rating"
+            response = reqs.post(url, data)
+            print(response.status_code)
+            print(response.text)
+
+        elif (message == "history"):
+            data = {"cookie": str(COOKIE_ID)}
+            url = "http://localhost:5000/history"
+            response = reqs.post(url, data)
+            print(response.status_code)
+            print(response.text)
 
         else:
             print("Please enter a valid message.")
             continue
 
         time_1 = time.time()
-        s.sendall(message.encode("utf-8"))
         data = s.recv(1024)
         time_2 = time.time()
         data = data.decode('utf-8')
@@ -123,5 +164,6 @@ if __name__ == "__main__":
 
         else:
             print(data)
-
+        
         print("(Took " + str(time_2-time_1) + " seconds)")
+
