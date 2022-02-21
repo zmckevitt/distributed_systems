@@ -22,47 +22,47 @@ def index():
 @app.route('/products/sell', methods = ['POST'])
 def sell_product():
     name = request.form.get('name')
-    keywords = request.form.get('quantity')
+    keywords = request.form.get('keywords')
     category = int(request.form.get('category'))
     condition = bool(request.form.get('condition'))
     price = float(request.form.get('price'))
-    cookie = int(request.form.get('cookie'))
+    u_id = int(request.form.get('u_id'))
 
     ss = SellerServer()
-    res = ss.sell_product(name, category, keywords, condition, price, cookie)
+    res = ss.sell_product(name, category, keywords, condition, price, u_id)
     print("Response = ", res)
-    return res
+    return str(res)
 
 @app.route('/products/modify', methods = ['POST'])
 def modify_product():
     item_id = int(request.form.get('id'))
     price = float(request.form.get('price'))
-    cookie = int(request.form.get('cookie'))
+    u_id = int(request.form.get('u_id'))
 
     ss = SellerServer()
-    res = ss.modify_product(item_id, price, cookie)
+    res = ss.modify_product(item_id, price, u_id)
     print("Response = ", res)
-    return res
+    return str(res)
 
 @app.route('/products/remove', methods = ['POST'])
 def remove_product():
     item_id = int(request.form.get('id'))
     quantity = int(request.form.get('quantity'))
-    cookie = int(request.form.get('cookie'))
+    u_id = int(request.form.get('u_id'))
 
     ss = SellerServer()
-    res = ss.remove_product(item_id, quantity, cookie)
+    res = ss.remove_product(item_id, quantity, u_id)
     print("Response = ", res)
-    return res
+    return str(res)
 
 @app.route('/products/list', methods = ['POST'])
 def list_products():
-    cookie = int(request.form.get('cookie'))
+    u_id = int(request.form.get('u_id'))
 
     ss = SellerServer()
-    res = ss.search_products(cookie)
+    res = ss.list_products(u_id)
     print("Response = ", res)
-    return res
+    return str(res)
 
 @app.route('/user/createUser', methods = ['POST'])
 def create_user():
@@ -71,7 +71,7 @@ def create_user():
     ss = SellerServer()
     res = ss.create_user(username, password)
     print("Response = ", res)
-    return res
+    return str(res)
 
 @app.route('/user/login', methods = ['POST'])
 def login():
@@ -80,25 +80,23 @@ def login():
     ss = SellerServer()
     res = ss.login(username, password)
     print("Response = ", res)
-    return res
+    return str(res)
 
 @app.route('/user/logout', methods = ['POST'])
 def logout():
-    cookie = request.form.get('cookie')
+    u_id = int(request.form.get('u_id'))
     ss = SellerServer()
-    res = ss.logout(cookie)
+    res = ss.logout(u_id)
     print("Response = ", res)
-    return res
+    return str(res)
 
 @app.route('/rating', methods = ['POST'])
 def rating():
-    seller_id_str = request.form.get('seller_id')
-    seller_id = int(seller_id_str)
-    cookie = request.form.get('cookie')
+    u_id = int(request.form.get('s_id'))
     ss = SellerServer()
-    res = ss.rating(seller_id, cookie)
+    res = ss.rating(u_id)
     print("Response = ", res)
-    return res
+    return str(res)
 
 class SellerServer():
     def __init__(self):
@@ -110,21 +108,21 @@ class SellerServer():
 
         self.stub = service.marketplaceStub(self.channel)
 
-    def sell_product(self, name, category, keywords, condition, price, cookie):
+    def sell_product(self, name, category, keywords, condition, price, u_id):
         req = message.ListItem(name=name, category=category, keywords=keywords, \
-                                condition=condition, price=price, cookie=cookie)
+                                condition=condition, price=price, u_id=u_id)
         return self.stub.sell(req)
 
-    def modify_product(self, _id, price, cookie):
-        req = message.PriceItem(id=_id, price=price, cookie=cookie)
+    def modify_product(self, _id, price, u_id):
+        req = message.PriceItem(id=_id, price=price, u_id=u_id)
         return self.stub.modify(req)
 
-    def remove_product(self, _id, quantity):
-        req = message.RemoveItem(id=_id, quantity=quantity)
+    def remove_product(self, _id, quantity, u_id):
+        req = message.RemoveItem(id=_id, quantity=quantity, u_id=u_id)
         return self.stub.removeListing(req)
 
-    def list_products(self, cookie):
-        req = message.ListRequest(cookie=cookie)
+    def list_products(self, u_id):
+        req = message.ListRequest(u_id=u_id)
         return self.stub.list(req)
     
     def create_user(self, username, password):
@@ -135,12 +133,12 @@ class SellerServer():
         req = message.LoginRequest(username=username, password=password)
         return self.stub.login(req)
 
-    def logout(self, cookie):
-        req = message.LogoutRequest(cookie=cookie)
+    def logout(self, u_id):
+        req = message.LogoutRequest(u_id=u_id)
         return self.stub.logout(req)
 
-    def rating(self, seller_id, cookie):
-        req = message.RatingRequest(seller_id=seller_id, cookie=cookie)
+    def rating(self, s_id):
+        req = message.RatingRequest(s_id=s_id)
         return self.stub.rating(req)
 
 

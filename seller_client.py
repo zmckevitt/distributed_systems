@@ -45,7 +45,7 @@ if __name__ == "__main__":
                     "keywords" : item_keywords,
                     "condition": item_condition,
                     "price" : item_price,
-                    "cookie": str(COOKIE_ID)}
+                    "u_id": COOKIE_ID}
             url = "http://localhost:5000/products/sell"
             response = reqs.post(url, data)
             print(response.status_code)
@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
             data = {"id": item_id,
                     "price": item_price,
-                    "cookie": str(COOKIE_ID)}
+                    "u_id": COOKIE_ID}
             url = "http://localhost:5000/products/modify"
             response = reqs.post(url, data)
             print(response.status_code)
@@ -69,14 +69,14 @@ if __name__ == "__main__":
 
             data = {"id": item_id,
                     "quantity": item_quantity,
-                    "cookie": str(COOKIE_ID)}
+                    "u_id": COOKIE_ID}
             url = "http://localhost:5000/products/remove"
             response = reqs.post(url, data)
             print(response.status_code)
             print(response.text)
 
         elif(message == "list"):
-            data = {"cookie": str(COOKIE_ID)}
+            data = {"u_id": COOKIE_ID}
             url = "http://localhost:5000/products/list"
             response = reqs.post(url, data)
             print(response.status_code)
@@ -104,12 +104,14 @@ if __name__ == "__main__":
             print(response.status_code)
             print(response.text)
 
-            # set cookie
-            # COOKIE_ID = int(response.text)
+            COOKIE_ID = int(response.text[7:-2])
+            if(COOKIE_ID != -1):
+                print("Logged in with u_id: " + str(COOKIE_ID))
+            else:
+                print("Login failed.")
 
         elif(message == "logout"):
-            message = "logout\n" + str(COOKIE_ID)
-            data = {"cookie": str(COOKIE_ID)}
+            data = {"u_id": COOKIE_ID}
             url = "http://localhost:5000/user/logout"
             response = reqs.post(url, data)
             print(response.status_code)
@@ -118,10 +120,7 @@ if __name__ == "__main__":
 
         elif (message == "rating"):
 
-            # Writeup says to provide BUYER id, but I assume it means SELLER id
-            s_id = input("Please provide a seller ID: ")
-
-            data = {"seller_id": s_id, "cookie": str(COOKIE_ID)}
+            data = {"s_id": COOKIE_ID}
             url = "http://localhost:5000/rating"
             response = reqs.post(url, data)
             print(response.status_code)
