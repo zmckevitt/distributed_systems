@@ -20,10 +20,7 @@ cus_db = mysql.connector.connect(
     database="customer"
 )
 
-# TODO: 
-#   register seller ID in the product database 
-#       (buyers provide feedback on ITEMS, need to tie items to sellers)
-#   make item IDs generated server-side, not client defined
+# TODO: increment number of items sold by seller
 
 # Handler for new connection
 # Connects to database to run commands
@@ -37,6 +34,11 @@ def thread_handler(conn):
 
         if(command == "sell"):
 
+            item_name = tokens[1]
+            item_category = tokens[2]
+            item_keywords = tokens[3]
+            item_condition = tokens[4]
+            item_price = tokens[5]
             u_id = tokens[6]
             if(int(u_id) == -1):
                 data = "User is not logged in."
@@ -53,9 +55,9 @@ def thread_handler(conn):
                 sql_query = "INSERT INTO products " \
                             + "(name, category, id, keywords, item_condition, price, s_id) " \
                             + "VALUES " \
-                            + "(\"" + tokens[1] + "\", " + tokens[2] + ", " \
-                            + str(new_id) + ", " + "\"" + tokens[3] + "\", " \
-                            + tokens[4] + ", " + tokens[5] + ", " + tokens[6] + ");"
+                            + "(\"" + item_name + "\", " + item_category + ", " \
+                            + str(new_id) + ", " + "\"" + item_keywords + "\", " \
+                            + item_condition + ", " + item_price + ", " + u_id + ");"
 
                 print(sql_query)
                 db_cursor.execute(sql_query)
@@ -63,23 +65,43 @@ def thread_handler(conn):
                 prod_db.commit()
 
         elif(command == "modify"):
-            sql_query = "UPDATE products SET price=" + tokens[2] + " WHERE id=" + tokens[1] + ";"
-            db_cursor.execute(sql_query)
-            data = "Price updated successfully."
-            prod_db.commit()
+
+            item_id = tokens[1]
+            new_price = tokens[2]
+            u_id = tokens[3]
+
+            if(int(u_id) == -1):
+                data = "User is not logged in."
+                
+            else:
+                sql_query = "UPDATE products SET price=" + new_price + " WHERE id=" + item_id + " AND s_id=" + u_id + ";"
+                db_cursor.execute(sql_query)
+                data = "Price updated successfully."
+                prod_db.commit()
 
         elif(command == "remove"):
-            sql_query = "DELETE FROM products WHERE id=" + tokens[1] + " LIMIT " + tokens[2] + ";"
-            db_cursor.execute(sql_query)
-            data = "Entry removed."
-            prod_db.commit()
+
+            item_id = tokens[1]
+            item_quantity = tokens[2]
+            u_id = tokens[3]
+
+            if(int(u_id) == -1):
+                data = "User is not logged in."
+
+            else:
+                sql_query = "DELETE FROM products WHERE id=" + item_id + " AND s_id=" + u_id + " LIMIT " + item_quantity + ";"
+                db_cursor.execute(sql_query)
+                data = "Entry removed."
+                prod_db.commit()
 
         elif(command == "list"):
+
             u_id = tokens[1]
             if(int(u_id) == -1):
                 data = "User is not logged in."
+
             else:
-                db_cursor.execute("SELECT * FROM products WHERE s_id=" + tokens[1] + ";")
+                db_cursor.execute("SELECT * FROM products WHERE s_id=" + u_id + ";")
                 data = ""
                 for x in db_cursor:
                     data += str(x) + "\n"
@@ -92,6 +114,11 @@ def thread_handler(conn):
             #       Username + password combo already exists?
 
             # get current highest user ID
+
+
+            name = tokens[1]
+            password = tokens[2]
+
             cus_cursor.execute("SELECT MAX(id) FROM customer.users;")
             data = ""
 
@@ -104,14 +131,14 @@ def thread_handler(conn):
             sql_query = "INSERT INTO users " \
                         + "(name, id, nitems) " \
                         + "VALUES " \
-                        + "(\"" + tokens[1] + "\", " + str(new_id) + ", " + "0);"
+                        + "(\"" + name + "\", " + str(new_id) + ", " + "0);"
 
             cus_cursor.execute(sql_query)
 
             sql_query = "INSERT INTO passwords "\
                         + "(id, password) " \
                         + "VALUES " \
-                        + "(" + str(new_id) + ", " + "\"" + tokens[2] + "\")"
+                        + "(" + str(new_id) + ", " + "\"" + password + "\")"
 
             cus_cursor.execute(sql_query)
 
@@ -170,6 +197,7 @@ def thread_handler(conn):
             u_id = tokens[1]
             if(int(u_id) == -1):
                 data = "User is not logged in."
+
             else:
                 sql_query = "UPDATE logged SET logged=0 WHERE id=" + u_id + ";"
                 cus_cursor.execute(sql_query)
@@ -181,6 +209,7 @@ def thread_handler(conn):
             u_id = tokens[1]
             if(int(u_id) == -1):
                 data = "User is not logged in."
+
             else:
                 sql_query = "SELECT * FROM feedback WHERE id=" + u_id + ";"
                 cus_cursor.execute(sql_query)

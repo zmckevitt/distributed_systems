@@ -45,7 +45,7 @@ if __name__ == "__main__":
         elif(message == "modify"):
             item_id = input("Please enter the item ID: ")
             item_price = input("Please list the new price: ")
-            message = "modify\n" + item_id + "\n" + item_price
+            message = "modify\n" + item_id + "\n" + item_price + "\n" + str(COOKIE_ID)
 
         elif(message == "remove"):
             item_id = input("Please enter the item ID: ")
