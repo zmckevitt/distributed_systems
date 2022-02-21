@@ -12,8 +12,8 @@ SERVER_PORT = 8080
 COOKIE_ID = -1
 
 if __name__ == "__main__":
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((SERVER_IP, SERVER_PORT))
+    # s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # s.connect((SERVER_IP, SERVER_PORT))
 
     print("--------Commands--------")
     print("1. sell - list an item for sale")
@@ -39,65 +39,112 @@ if __name__ == "__main__":
             else:
                 item_condition = "False"
             item_price = input("Please enter the price of the item: ")
-            message = "sell\n" + item_name + "\n" + item_category + "\n" + item_keywords \
-                    + "\n" + item_condition + "\n" + item_price + "\n" + str(COOKIE_ID)
+
+            data = {"name": item_name,
+                    "category": item_category,
+                    "keywords" : item_keywords,
+                    "condition": item_condition,
+                    "price" : item_price
+                    "cookie": str(COOKIE_ID)}
+            url = "http://localhost:5000/products/sell"
+            response = reqs.post(url, data)
+            print(response.status_code)
+            print(response.text)
 
         elif(message == "modify"):
             item_id = input("Please enter the item ID: ")
             item_price = input("Please list the new price: ")
-            message = "modify\n" + item_id + "\n" + item_price + "\n" + str(COOKIE_ID)
+
+            data = {"id": item_id,
+                    "price": item_price,
+                    "cookie": str(COOKIE_ID)}
+            url = "http://localhost:5000/products/modify"
+            response = reqs.post(url, data)
+            print(response.status_code)
+            print(response.text)
 
         elif(message == "remove"):
             item_id = input("Please enter the item ID: ")
             item_quantity = input("Please enter the quantity: ")
-            message = "remove\n" + item_id + "\n" + item_quantity
+
+            data = {"id": item_id,
+                    "quantity": item_quantity,
+                    "cookie": str(COOKIE_ID)}
+            url = "http://localhost:5000/products/remove"
+            response = reqs.post(url, data)
+            print(response.status_code)
+            print(response.text)
 
         elif(message == "list"):
-            message = "list\n" + str(COOKIE_ID)
+            data = {"cookie": str(COOKIE_ID)}
+            url = "http://localhost:5000/products/list"
+            response = reqs.post(url, data)
+            print(response.status_code)
+            print(response.text)
 
         elif(message == "create"):
             username = input("Enter a username: ")
             password = input("Enter a password: ")
-
-            message = "create\n" + username + "\n" + password
+            data = {"username": username, "password": password}
+            url = "http://localhost:5000/user/createUser"
+            response = reqs.post(url, data)
+            print(response.status_code)
+            print(response.text)
 
         elif(message == "login"):
-            
+
             # will need to set COOKIE_ID from response
             set_cookie = True
 
             username = input("Enter a username: ")
             password = input("Enter a password: ")
+            data = {"username": username, "password": password}
+            url = "http://localhost:5000/user/login"
+            response = reqs.post(url, data)
+            print(response.status_code)
+            print(response.text)
 
-            message = "login\n" + username + "\n" + password
+            # set cookie
+            # COOKIE_ID = int(response.text)
 
         elif(message == "logout"):
             message = "logout\n" + str(COOKIE_ID)
+            data = {"cookie": str(COOKIE_ID)}
+            url = "http://localhost:5000/user/logout"
+            response = reqs.post(url, data)
+            print(response.status_code)
+            print(response.text)
             COOKIE_ID = -1
 
-        elif(message == "rating"):
+        elif (message == "rating"):
 
-            # send COOKIE_ID along with rating
-            message = "rating\n" + str(COOKIE_ID)
+            # Writeup says to provide BUYER id, but I assume it means SELLER id
+            s_id = input("Please provide a seller ID: ")
+
+            data = {"seller_id": s_id, "cookie": str(COOKIE_ID)}
+            url = "http://localhost:5000/rating"
+            response = reqs.post(url, data)
+            print(response.status_code)
+            print(response.text)
 
         else:
             print("Please enter a valid message.")
             continue
 
-        time_1 = time.time()
-        s.sendall(message.encode("utf-8"))
-        data = s.recv(1024)
-        time_2 = time.time()
-        data = data.decode('utf-8')
+        # time_1 = time.time()
+        # s.sendall(message.encode("utf-8"))
+        # data = s.recv(1024)
+        # time_2 = time.time()
+        # data = data.decode('utf-8')
 
-        if(set_cookie):
-            COOKIE_ID = int(data)
-            if(COOKIE_ID != -1):
-                print("Logged in with UID: " + str(COOKIE_ID))
-            else:
-                print("Invalid username or password.")
+        # if(set_cookie):
+        #     COOKIE_ID = int(data)
+        #     if(COOKIE_ID != -1):
+        #         print("Logged in with UID: " + str(COOKIE_ID))
+        #     else:
+        #         print("Invalid username or password.")
 
-        else:
-            print(data)
+        # else:
+        #     print(data)
 
-        print("(Took " + str(time_2-time_1) + " seconds)")
+        # print("(Took " + str(time_2-time_1) + " seconds)")

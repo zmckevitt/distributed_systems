@@ -18,6 +18,14 @@ prod_db = mysql.connector.connect(
     database="product"
 )
 
+cus_db = mysql.connector.connect(
+    host="localhost",
+    user="prod",
+    password="prodpassword",
+    database="customer"
+)
+
+
 class BuyerService(service.marketplaceServicer):
     def Search(self, request, context):
         sql_query = "SELECT * FROM products " \

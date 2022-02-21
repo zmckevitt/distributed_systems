@@ -14,6 +14,26 @@ class marketplaceStub(object):
         Args:
             channel: A grpc.Channel.
         """
+        self.sell = channel.unary_unary(
+                '/marketplacePackage.marketplace/sell',
+                request_serializer=marketplace__pb2.ListItem.SerializeToString,
+                response_deserializer=marketplace__pb2.Response.FromString,
+                )
+        self.modify = channel.unary_unary(
+                '/marketplacePackage.marketplace/modify',
+                request_serializer=marketplace__pb2.PriceItem.SerializeToString,
+                response_deserializer=marketplace__pb2.Response.FromString,
+                )
+        self.removeListing = channel.unary_unary(
+                '/marketplacePackage.marketplace/removeListing',
+                request_serializer=marketplace__pb2.RemoveItem.SerializeToString,
+                response_deserializer=marketplace__pb2.Response.FromString,
+                )
+        self.list = channel.unary_unary(
+                '/marketplacePackage.marketplace/list',
+                request_serializer=marketplace__pb2.ListRequest.SerializeToString,
+                response_deserializer=marketplace__pb2.Response.FromString,
+                )
         self.search = channel.unary_unary(
                 '/marketplacePackage.marketplace/search',
                 request_serializer=marketplace__pb2.SearchRequest.SerializeToString,
@@ -39,6 +59,26 @@ class marketplaceStub(object):
                 request_serializer=marketplace__pb2.void.SerializeToString,
                 response_deserializer=marketplace__pb2.Response.FromString,
                 )
+        self.purchase = channel.unary_unary(
+                '/marketplacePackage.marketplace/purchase',
+                request_serializer=marketplace__pb2.PurchaseRequest.SerializeToString,
+                response_deserializer=marketplace__pb2.Response.FromString,
+                )
+        self.feedback = channel.unary_unary(
+                '/marketplacePackage.marketplace/feedback',
+                request_serializer=marketplace__pb2.FeedbackRequest.SerializeToString,
+                response_deserializer=marketplace__pb2.Response.FromString,
+                )
+        self.history = channel.unary_unary(
+                '/marketplacePackage.marketplace/history',
+                request_serializer=marketplace__pb2.HistoryRequest.SerializeToString,
+                response_deserializer=marketplace__pb2.Response.FromString,
+                )
+        self.rating = channel.unary_unary(
+                '/marketplacePackage.marketplace/rating',
+                request_serializer=marketplace__pb2.RatingRequest.SerializeToString,
+                response_deserializer=marketplace__pb2.Response.FromString,
+                )
         self.createUser = channel.unary_unary(
                 '/marketplacePackage.marketplace/createUser',
                 request_serializer=marketplace__pb2.UserRequest.SerializeToString,
@@ -54,30 +94,34 @@ class marketplaceStub(object):
                 request_serializer=marketplace__pb2.LogoutRequest.SerializeToString,
                 response_deserializer=marketplace__pb2.Response.FromString,
                 )
-        self.purchase = channel.unary_unary(
-                '/marketplacePackage.marketplace/purchase',
-                request_serializer=marketplace__pb2.PurchaseRequest.SerializeToString,
-                response_deserializer=marketplace__pb2.Response.FromString,
-                )
-        self.feedback = channel.unary_unary(
-                '/marketplacePackage.marketplace/feedback',
-                request_serializer=marketplace__pb2.FeedbackRequest.SerializeToString,
-                response_deserializer=marketplace__pb2.Response.FromString,
-                )
-        self.rating = channel.unary_unary(
-                '/marketplacePackage.marketplace/rating',
-                request_serializer=marketplace__pb2.RatingRequest.SerializeToString,
-                response_deserializer=marketplace__pb2.Response.FromString,
-                )
-        self.history = channel.unary_unary(
-                '/marketplacePackage.marketplace/history',
-                request_serializer=marketplace__pb2.HistoryRequest.SerializeToString,
-                response_deserializer=marketplace__pb2.Response.FromString,
-                )
 
 
 class marketplaceServicer(object):
     """Missing associated documentation comment in .proto file."""
+
+    def sell(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def modify(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def removeListing(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def list(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def search(self, request, context):
         """Missing associated documentation comment in .proto file."""
@@ -109,6 +153,30 @@ class marketplaceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def purchase(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def feedback(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def history(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def rating(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def createUser(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -127,33 +195,29 @@ class marketplaceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def purchase(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def feedback(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def rating(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def history(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
 
 def add_marketplaceServicer_to_server(servicer, server):
     rpc_method_handlers = {
+            'sell': grpc.unary_unary_rpc_method_handler(
+                    servicer.sell,
+                    request_deserializer=marketplace__pb2.ListItem.FromString,
+                    response_serializer=marketplace__pb2.Response.SerializeToString,
+            ),
+            'modify': grpc.unary_unary_rpc_method_handler(
+                    servicer.modify,
+                    request_deserializer=marketplace__pb2.PriceItem.FromString,
+                    response_serializer=marketplace__pb2.Response.SerializeToString,
+            ),
+            'removeListing': grpc.unary_unary_rpc_method_handler(
+                    servicer.removeListing,
+                    request_deserializer=marketplace__pb2.RemoveItem.FromString,
+                    response_serializer=marketplace__pb2.Response.SerializeToString,
+            ),
+            'list': grpc.unary_unary_rpc_method_handler(
+                    servicer.list,
+                    request_deserializer=marketplace__pb2.ListRequest.FromString,
+                    response_serializer=marketplace__pb2.Response.SerializeToString,
+            ),
             'search': grpc.unary_unary_rpc_method_handler(
                     servicer.search,
                     request_deserializer=marketplace__pb2.SearchRequest.FromString,
@@ -179,6 +243,26 @@ def add_marketplaceServicer_to_server(servicer, server):
                     request_deserializer=marketplace__pb2.void.FromString,
                     response_serializer=marketplace__pb2.Response.SerializeToString,
             ),
+            'purchase': grpc.unary_unary_rpc_method_handler(
+                    servicer.purchase,
+                    request_deserializer=marketplace__pb2.PurchaseRequest.FromString,
+                    response_serializer=marketplace__pb2.Response.SerializeToString,
+            ),
+            'feedback': grpc.unary_unary_rpc_method_handler(
+                    servicer.feedback,
+                    request_deserializer=marketplace__pb2.FeedbackRequest.FromString,
+                    response_serializer=marketplace__pb2.Response.SerializeToString,
+            ),
+            'history': grpc.unary_unary_rpc_method_handler(
+                    servicer.history,
+                    request_deserializer=marketplace__pb2.HistoryRequest.FromString,
+                    response_serializer=marketplace__pb2.Response.SerializeToString,
+            ),
+            'rating': grpc.unary_unary_rpc_method_handler(
+                    servicer.rating,
+                    request_deserializer=marketplace__pb2.RatingRequest.FromString,
+                    response_serializer=marketplace__pb2.Response.SerializeToString,
+            ),
             'createUser': grpc.unary_unary_rpc_method_handler(
                     servicer.createUser,
                     request_deserializer=marketplace__pb2.UserRequest.FromString,
@@ -194,26 +278,6 @@ def add_marketplaceServicer_to_server(servicer, server):
                     request_deserializer=marketplace__pb2.LogoutRequest.FromString,
                     response_serializer=marketplace__pb2.Response.SerializeToString,
             ),
-            'purchase': grpc.unary_unary_rpc_method_handler(
-                    servicer.purchase,
-                    request_deserializer=marketplace__pb2.PurchaseRequest.FromString,
-                    response_serializer=marketplace__pb2.Response.SerializeToString,
-            ),
-            'feedback': grpc.unary_unary_rpc_method_handler(
-                    servicer.feedback,
-                    request_deserializer=marketplace__pb2.FeedbackRequest.FromString,
-                    response_serializer=marketplace__pb2.Response.SerializeToString,
-            ),
-            'rating': grpc.unary_unary_rpc_method_handler(
-                    servicer.rating,
-                    request_deserializer=marketplace__pb2.RatingRequest.FromString,
-                    response_serializer=marketplace__pb2.Response.SerializeToString,
-            ),
-            'history': grpc.unary_unary_rpc_method_handler(
-                    servicer.history,
-                    request_deserializer=marketplace__pb2.HistoryRequest.FromString,
-                    response_serializer=marketplace__pb2.Response.SerializeToString,
-            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
             'marketplacePackage.marketplace', rpc_method_handlers)
@@ -223,6 +287,74 @@ def add_marketplaceServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class marketplace(object):
     """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def sell(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/sell',
+            marketplace__pb2.ListItem.SerializeToString,
+            marketplace__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def modify(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/modify',
+            marketplace__pb2.PriceItem.SerializeToString,
+            marketplace__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def removeListing(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/removeListing',
+            marketplace__pb2.RemoveItem.SerializeToString,
+            marketplace__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def list(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/list',
+            marketplace__pb2.ListRequest.SerializeToString,
+            marketplace__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def search(request,
@@ -310,6 +442,74 @@ class marketplace(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
+    def purchase(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/purchase',
+            marketplace__pb2.PurchaseRequest.SerializeToString,
+            marketplace__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def feedback(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/feedback',
+            marketplace__pb2.FeedbackRequest.SerializeToString,
+            marketplace__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def history(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/history',
+            marketplace__pb2.HistoryRequest.SerializeToString,
+            marketplace__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def rating(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/rating',
+            marketplace__pb2.RatingRequest.SerializeToString,
+            marketplace__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
     def createUser(request,
             target,
             options=(),
@@ -356,74 +556,6 @@ class marketplace(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/logout',
             marketplace__pb2.LogoutRequest.SerializeToString,
-            marketplace__pb2.Response.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def purchase(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/purchase',
-            marketplace__pb2.PurchaseRequest.SerializeToString,
-            marketplace__pb2.Response.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def feedback(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/feedback',
-            marketplace__pb2.FeedbackRequest.SerializeToString,
-            marketplace__pb2.Response.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def rating(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/rating',
-            marketplace__pb2.RatingRequest.SerializeToString,
-            marketplace__pb2.Response.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def history(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/history',
-            marketplace__pb2.HistoryRequest.SerializeToString,
             marketplace__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

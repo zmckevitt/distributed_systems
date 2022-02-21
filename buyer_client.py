@@ -13,8 +13,8 @@ SERVER_PORT = 5000
 COOKIE_ID = -1
 
 if __name__ == "__main__":
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((SERVER_IP, SERVER_PORT))
+    # s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # s.connect((SERVER_IP, SERVER_PORT))
 
     print("--------Commands--------")
     print("1. search - search items for sale")
@@ -150,20 +150,20 @@ if __name__ == "__main__":
             print("Please enter a valid message.")
             continue
 
-        time_1 = time.time()
-        data = s.recv(1024)
-        time_2 = time.time()
-        data = data.decode('utf-8')
+        # time_1 = time.time()
+        # data = s.recv(1024)
+        # time_2 = time.time()
+        # data = data.decode('utf-8')
 
-        if(set_cookie):
-            COOKIE_ID = int(data)
-            if(COOKIE_ID != -1):
-                print("Logged in with UID: " + str(COOKIE_ID))
-            else:
-                print("Invalid username or password.")
+        # if(set_cookie):
+        #     COOKIE_ID = int(data)
+        #     if(COOKIE_ID != -1):
+        #         print("Logged in with UID: " + str(COOKIE_ID))
+        #     else:
+        #         print("Invalid username or password.")
 
-        else:
-            print(data)
+        # else:
+        #     print(data)
         
-        print("(Took " + str(time_2-time_1) + " seconds)")
+        # print("(Took " + str(time_2-time_1) + " seconds)")
 

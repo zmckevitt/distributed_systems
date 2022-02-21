@@ -120,7 +120,7 @@ def rating():
     return res
 
 @app.route('/history', methods = ['POST'])
-def rating():
+def history():
     cookie = request.form.get('cookie')
     bs = BuyerServer()
     res = bs.rating(cookie)
