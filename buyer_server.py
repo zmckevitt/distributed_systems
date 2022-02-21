@@ -26,39 +26,47 @@ def search_products():
 
 @app.route('/cart/addItem', methods = ['POST'])
 def add_to_cart():
-    id_str = request.form.get('id')
+    item_id_str = request.form.get('item_id')
+    u_id_str = request.form.get('u_id')
     quantity_str = request.form.get('quantity')
-    id = int(id_str)
+    item_id = int(item_id_str)
+    u_id = int(u_id_str)
     quantity = int(quantity_str)
-    print("id = ",id,"quantity = ", quantity)
+    print("item_id = ", item_id,"u_id = ", u_id, "quantity = ", quantity)
     bs = BuyerServer()
-    res = bs.add_to_cart(id, quantity)
+    res = bs.add_to_cart(item_id, u_id, quantity)
     print("Response = ", res)
     return res
 
 @app.route('/cart/removeItem', methods = ['POST'])
 def remove_from_cart():
-    id_str = request.form.get('id')
+    item_id_str = request.form.get('item_id')
+    u_id_str = request.form.get('u_id')
     quantity_str = request.form.get('quantity')
-    id = int(id_str)
+    item_id = int(item_id_str)
+    u_id = int(u_id_str)
     quantity = int(quantity_str)
-    print("id = ", id, "quantity = ", quantity)
+    print("item_id = ", item_id, "u_id = ", u_id, "quantity = ", quantity)
     bs = BuyerServer()
-    res = bs.remove_from_cart(id, quantity)
+    res = bs.remove_from_cart(item_id, u_id, quantity)
     print("Response  = ", res)
     return res
 
 @app.route('/cart/clear', methods = ['GET'])
 def clear_cart():
+    u_id_str = request.form.get('u_id')
+    u_id = int(u_id_str)
     bs = BuyerServer()
-    res = bs.clear_cart()
+    res = bs.clear_cart(u_id)
     print("Response = ", res)
     return res
 
 @app.route('/cart/display', methods = ['GET'])
 def display_cart():
+    u_id_str = request.form.get('u_id')
+    u_id = int(u_id_str)
     bs = BuyerServer()
-    res = bs.display_cart()
+    res = bs.display_cart(u_id)
     print("Response = ", res)
     return res
 
@@ -120,7 +128,7 @@ def rating():
     return res
 
 @app.route('/history', methods = ['POST'])
-def rating():
+def history():
     cookie = request.form.get('cookie')
     bs = BuyerServer()
     res = bs.rating(cookie)
@@ -143,20 +151,20 @@ class BuyerServer():
         req = message.SearchRequest(category=category, keywords=keywords)
         return self.stub.search(req)
 
-    def add_to_cart(self, id, quantity):
-        req = message.Item(id=id, quantity=quantity)
+    def add_to_cart(self, item_id, u_id, quantity):
+        req = message.ItemRequest(item_id=item_id, u_id=u_id, quantity=quantity)
         return self.stub.add(req)
 
     def remove_from_cart(self, id, quantity):
-        req = message.Item(id=id, quantity=quantity)
+        req = message.ItemRequest(item_id=item_id, u_id=u_id, quantity=quantity)
         return self.stub.remove(req)
 
-    def clear_cart(self):
-        req = message.void()
+    def clear_cart(self, u_id):
+        req = message.RequestUid(u_id=u_id)
         return self.stub.clear(req)
 
-    def display_cart(self):
-        req = message.void()
+    def display_cart(self, u_id):
+        req = message.RequestUid(u_id=u_id)
         return self.stub.display(req)
     
     def create_user(self, username, password):

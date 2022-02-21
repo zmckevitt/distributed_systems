@@ -21,22 +21,22 @@ class marketplaceStub(object):
                 )
         self.add = channel.unary_unary(
                 '/marketplacePackage.marketplace/add',
-                request_serializer=marketplace__pb2.Item.SerializeToString,
+                request_serializer=marketplace__pb2.ItemRequest.SerializeToString,
                 response_deserializer=marketplace__pb2.Response.FromString,
                 )
         self.remove = channel.unary_unary(
                 '/marketplacePackage.marketplace/remove',
-                request_serializer=marketplace__pb2.Item.SerializeToString,
+                request_serializer=marketplace__pb2.ItemRequest.SerializeToString,
                 response_deserializer=marketplace__pb2.Response.FromString,
                 )
         self.clear = channel.unary_unary(
                 '/marketplacePackage.marketplace/clear',
-                request_serializer=marketplace__pb2.void.SerializeToString,
+                request_serializer=marketplace__pb2.RequestUid.SerializeToString,
                 response_deserializer=marketplace__pb2.Response.FromString,
                 )
         self.display = channel.unary_unary(
                 '/marketplacePackage.marketplace/display',
-                request_serializer=marketplace__pb2.void.SerializeToString,
+                request_serializer=marketplace__pb2.RequestUid.SerializeToString,
                 response_deserializer=marketplace__pb2.Response.FromString,
                 )
         self.createUser = channel.unary_unary(
@@ -161,22 +161,22 @@ def add_marketplaceServicer_to_server(servicer, server):
             ),
             'add': grpc.unary_unary_rpc_method_handler(
                     servicer.add,
-                    request_deserializer=marketplace__pb2.Item.FromString,
+                    request_deserializer=marketplace__pb2.ItemRequest.FromString,
                     response_serializer=marketplace__pb2.Response.SerializeToString,
             ),
             'remove': grpc.unary_unary_rpc_method_handler(
                     servicer.remove,
-                    request_deserializer=marketplace__pb2.Item.FromString,
+                    request_deserializer=marketplace__pb2.ItemRequest.FromString,
                     response_serializer=marketplace__pb2.Response.SerializeToString,
             ),
             'clear': grpc.unary_unary_rpc_method_handler(
                     servicer.clear,
-                    request_deserializer=marketplace__pb2.void.FromString,
+                    request_deserializer=marketplace__pb2.RequestUid.FromString,
                     response_serializer=marketplace__pb2.Response.SerializeToString,
             ),
             'display': grpc.unary_unary_rpc_method_handler(
                     servicer.display,
-                    request_deserializer=marketplace__pb2.void.FromString,
+                    request_deserializer=marketplace__pb2.RequestUid.FromString,
                     response_serializer=marketplace__pb2.Response.SerializeToString,
             ),
             'createUser': grpc.unary_unary_rpc_method_handler(
@@ -253,7 +253,7 @@ class marketplace(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/add',
-            marketplace__pb2.Item.SerializeToString,
+            marketplace__pb2.ItemRequest.SerializeToString,
             marketplace__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -270,7 +270,7 @@ class marketplace(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/remove',
-            marketplace__pb2.Item.SerializeToString,
+            marketplace__pb2.ItemRequest.SerializeToString,
             marketplace__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -287,7 +287,7 @@ class marketplace(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/clear',
-            marketplace__pb2.void.SerializeToString,
+            marketplace__pb2.RequestUid.SerializeToString,
             marketplace__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
@@ -304,7 +304,7 @@ class marketplace(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/marketplacePackage.marketplace/display',
-            marketplace__pb2.void.SerializeToString,
+            marketplace__pb2.RequestUid.SerializeToString,
             marketplace__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

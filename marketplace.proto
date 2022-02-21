@@ -4,10 +4,10 @@ package marketplacePackage;
 
 service marketplace{
 	rpc search(SearchRequest) returns (SearchResponse);
-	rpc add(Item) returns (Response);
-	rpc remove(Item) returns (Response);
-	rpc clear(void) returns (Response);
-	rpc display(void) returns (Response);
+	rpc add(ItemRequest) returns (Response);
+	rpc remove(ItemRequest) returns (Response);
+	rpc clear(RequestUid) returns (Response);
+	rpc display(RequestUid) returns (Response);
 	rpc createUser(UserRequest) returns (Response);
 	rpc login(LoginRequest) returns (Response);
 	rpc logout(LogoutRequest) returns (Response);
@@ -60,12 +60,22 @@ message Response{
 	string text = 1;
 }
 
+message ItemRequest{
+	int32 item_id = 1;
+	int32 u_id = 2;
+	int32 quantity = 3;
+}
+
 message Item{
-	int32 id = 1;
+    int32 item_id = 1;
 	int32 quantity = 2;
 }
 
 message SearchResponse{
 	repeated Item Items = 1;
+}
+
+message RequestUid{
+    int32 u_id = 1;
 }
 message void{}

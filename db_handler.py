@@ -3,8 +3,6 @@ import time
 import grpc
 import mysql.connector
 import sys
-#import pymysql
-#from config import conn
 
 import marketplace_pb2_grpc as service
 import marketplace_pb2 as message
@@ -33,7 +31,37 @@ class BuyerService(service.marketplaceServicer):
         print(data)
         return data
 
-
+    def add(self, request, context):
+        print("u_id = ", request.u_id )
+        if (request.u_id == -1):
+            data = "User is not logged in."
+            print("User is not logged in.")
+        else:
+            print("in handler...")
+            pre_query = "SELECT id FROM cart WHERE id = " + request.item_id + " AND b_id=" + request.u_id + ";"
+            db_cursor.execute(pre_query)
+            if db_cursor.rowcount == 0:
+                sql_query = "INSERT INTO cart VALUES(" + request.item_id + "," + request.u_id + "," + request.quantity + ");"
+                new_cursor = prod_db.cursor()
+                new_cursor.execute(sql_query)
+                if new_cursor.rowcount > 0:
+                    data = "Item added successfully."
+                else:
+                    data = "Item could not be added"
+            else:
+                sql_query = "UPDATE cart SET quantity = quantity+" + request.quantity \
+                            + " WHERE id = " + request.item_id + " AND b_id=" + request.u_id + ";"
+                print(sql_query)
+                new_cursor = prod_db.cursor()
+                new_cursor.execute(sql_query)
+                if new_cursor.rowcount > 0:
+                    data = "Item added successfully."
+                else:
+                    data = "Item could not be added"
+            prod_db.commit()
+            print("commited query")
+            ret = message.Response(text=data)
+            return ret
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
@@ -54,4 +82,3 @@ if __name__ == "__main__":
     db_cursor = prod_db.cursor(buffered=True)
     #cus_cursor = cus_db.cursor(buffered=True)
     serve()
-    conn.close()

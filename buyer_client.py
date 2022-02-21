@@ -13,8 +13,6 @@ SERVER_PORT = 5000
 COOKIE_ID = -1
 
 if __name__ == "__main__":
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((SERVER_IP, SERVER_PORT))
 
     print("--------Commands--------")
     print("1. search - search items for sale")
@@ -42,7 +40,7 @@ if __name__ == "__main__":
         elif(message == "add"):
             item_id = input("Please enter an item ID: ")
             item_quantity = input("Please enter an item quantity: ")
-            data = {"id": item_id, "quantity": item_quantity}
+            data = {"item_id": item_id, "u_id": COOKIE_ID, "quantity": item_quantity}
             url = "http://localhost:5000/cart/addItem"
             response = reqs.post(url, data)
             print(response.status_code)
@@ -51,7 +49,7 @@ if __name__ == "__main__":
         elif(message == "remove"):
             item_id = input("Please enter an item ID: ")
             item_quantity = input("Please enter an item quantity: ")
-            data = {"id": item_id, "quantity": item_quantity}
+            data = {"id": item_id, "u_id": COOKIE_ID, "quantity": item_quantity}
             url = "http://localhost:5000/cart/removeItem"
             response = reqs.post(url, data)
             print(response.status_code)
@@ -151,19 +149,18 @@ if __name__ == "__main__":
             continue
 
         time_1 = time.time()
-        data = s.recv(1024)
         time_2 = time.time()
-        data = data.decode('utf-8')
+        #data = data.decode('utf-8')
 
-        if(set_cookie):
+        if (set_cookie):
             COOKIE_ID = int(data)
-            if(COOKIE_ID != -1):
+            if (COOKIE_ID != -1):
                 print("Logged in with UID: " + str(COOKIE_ID))
             else:
                 print("Invalid username or password.")
 
         else:
             print(data)
-        
-        print("(Took " + str(time_2-time_1) + " seconds)")
+
+        print("(Took " + str(time_2 - time_1) + " seconds)")
 
