@@ -119,6 +119,20 @@ Buyer benchmarks:
 
 - ```add``` - 0.00620s
 
+-```create```- 0.91323
+
+-```login```- 0.23005
+
+-```logout```- 0.34269
+
+-```purchase```- 0.
+
+-```feedback```- 0.
+
+-```rating```- 0.16186
+
+-```history```- 1.00593
+
 Buyer benchmark Average: 0.00374 = 3.74ms
 
 Same machine average: 3.72ms
@@ -134,6 +148,16 @@ Seller benchmarks:
 - ```remove``` - 0.03597s
 
 - ```list``` - 0.02128s
+
+-```create```- 0.64591
+
+-```login```- 1.22935
+
+-```login```- 0.23005
+
+-```logout```- 0.87905
+
+-```rating```- 0.16428
 
 Seller benchmark average: 0.02429s = 24.29 ms
 
