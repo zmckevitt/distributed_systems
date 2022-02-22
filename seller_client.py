@@ -2,8 +2,10 @@ import sys
 import time
 import requests as reqs
 
-SERVER_IP = "127.0.0.1"
-SERVER_PORT = 8080
+#SERVER_IP = "http://127.0.0.1"
+SERVER_IP = "http://34.106.129.237"
+SERVER_PORT = "5000"
+BASE_URL = SERVER_IP+":"+SERVER_PORT
 
 # REST API allows for cookies when stored client side
 # cookie required to maintain login state
@@ -43,7 +45,7 @@ if __name__ == "__main__":
                     "condition": item_condition,
                     "price" : item_price,
                     "u_id": COOKIE_ID}
-            url = "http://localhost:5000/products/sell"
+            url = BASE_URL+"/products/sell"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
@@ -58,7 +60,7 @@ if __name__ == "__main__":
             data = {"id": item_id,
                     "price": item_price,
                     "u_id": COOKIE_ID}
-            url = "http://localhost:5000/products/modify"
+            url = BASE_URL+"/products/modify"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
@@ -73,7 +75,7 @@ if __name__ == "__main__":
             data = {"id": item_id,
                     "quantity": item_quantity,
                     "u_id": COOKIE_ID}
-            url = "http://localhost:5000/products/remove"
+            url = BASE_URL+"/products/remove"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
@@ -83,7 +85,7 @@ if __name__ == "__main__":
 
         elif(message == "list"):
             data = {"u_id": COOKIE_ID}
-            url = "http://localhost:5000/products/list"
+            url = BASE_URL+"/products/list"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
@@ -95,7 +97,7 @@ if __name__ == "__main__":
             username = input("Enter a username: ")
             password = input("Enter a password: ")
             data = {"username": username, "password": password}
-            url = "http://localhost:5000/user/createUser"
+            url = BASE_URL+"/user/createUser"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
@@ -108,7 +110,7 @@ if __name__ == "__main__":
             username = input("Enter a username: ")
             password = input("Enter a password: ")
             data = {"username": username, "password": password}
-            url = "http://localhost:5000/user/login"
+            url = BASE_URL+"/user/login"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
@@ -124,7 +126,7 @@ if __name__ == "__main__":
 
         elif(message == "logout"):
             data = {"u_id": COOKIE_ID}
-            url = "http://localhost:5000/user/logout"
+            url = BASE_URL+"/user/logout"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
@@ -136,7 +138,7 @@ if __name__ == "__main__":
         elif (message == "rating"):
 
             data = {"s_id": COOKIE_ID}
-            url = "http://localhost:5000/rating"
+            url = BASE_URL+"/rating"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()

@@ -25,5 +25,5 @@ def transaction():
 		return "No"
 
 if __name__ == "__main__":
-    app.run(host='localhost', port=6000, debug=True)
+    app.run(host='http://10.180.0.8', port=6000, debug=True)
     print('Server running with flask')

@@ -10,14 +10,14 @@ import marketplace_pb2 as message
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
 prod_db = mysql.connector.connect(
-    host="localhost",
+    host="http://10.180.0.6",
     user="prod",
     password="prodpassword",
     database="product"
 )
 
 cus_db = mysql.connector.connect(
-    host="localhost",
+    host="http://10.180.0.5",
     user="prod",
     password="prodpassword",
     database="customer"

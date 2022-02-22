@@ -161,7 +161,7 @@ def history():
 
 class BuyerServer():
     def __init__(self):
-        self.host = 'localhost'
+        self.host = 'http://10.180.0.4'
         self.port = 8090
 
         self.channel = grpc.insecure_channel(
@@ -219,5 +219,5 @@ class BuyerServer():
 
 
 if __name__ == "__main__":
-    app.run(host='localhost', port=5001, debug=True)
+    app.run(host='http://34.106.57.85', port=5001, debug=True)
     print('Server running with flask')
