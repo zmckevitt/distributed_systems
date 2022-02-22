@@ -146,29 +146,38 @@ class BuyerService(service.marketplaceServicer):
             data = "User is not logged in."
         else:
 
-            pre_query = "SELECT s_id FROM product.products "\
-                        + "INNER JOIN customer.purchased " \
-                        + "ON products.id = customer.purchased.id " \
-                        + "WHERE customer.purchased.b_id = " + str(u_id) \
-                        + " AND customer.purchased.id = " + str(item_id) + ";"
-
-            db_cursor.execute(pre_query)
+            pre_query = "SELECT id FROM purchased WHERE id=" + str(item_id) + " AND b_id=" + str(u_id) + ";"
+            cus_cursor.execute(pre_query)
 
             # get seller ID
-            s_id = -1
-            for x in db_cursor:
+            i_id = -1
+            for x in cus_cursor:
                 if(isinstance(x[0], int)):
-                    s_id = x[0]
+                    i_id = x[0]
 
-            if(s_id == -1):
+            if(i_id == -1):
                 data = "Error: seller not found or product not in purchase history."
             else:
-                # positive review
-                if(review == "True"):
-                    sql_query = "UPDATE feedback SET pos=pos+1 WHERE id=" + str(s_id) + ";"
-                # negative review
+
+                pre_query = "SELECT s_id FROM products WHERE id=" + str(i_id) + ";"
+
+                db_cursor.execute(pre_query)
+
+                s_id = -1
+                for x in db_cursor:
+                    if(isinstance(x[0], int)):
+                        s_id = x[0]
+
+                if(s_id == -1):
+                    data = "Error: seller not found or product not in purchase history."
+
                 else:
-                    sql_query = "UPDATE feedback SET neg=neg+1 WHERE id=" + str(s_id) + ";"
+                    # positive review
+                    if(review == "True"):
+                        sql_query = "UPDATE feedback SET pos=pos+1 WHERE id=" + str(s_id) + ";"
+                    # negative review
+                    else:
+                        sql_query = "UPDATE feedback SET neg=neg+1 WHERE id=" + str(s_id) + ";"
 
                 cus_cursor.execute(sql_query)
                 cus_db.commit()
