@@ -16,6 +16,16 @@ The seller server interfaces with the products table in the product database whi
 
 - ```list``` - Lists all items in the database. Invokes a SELECT query.
 
+- ```clear``` - Clear the current cart. This will issue a DELETE command to delete everything from cart.
+
+- ```create``` - Creates a user with username and password in the Users table of Customer database. 
+
+- ```login``` - Takes username and password as input. Returns successful if username password mache, otherwise fails.
+
+- ```logout``` - Logs out the current logged-in user.
+
+- ```rating``` - Fetches all the ratings from feedback table for a seller .
+
 ### Buyer API functions
 
 - ```search``` - Search items by category. Provide an item category and keywords. This will use a SELECT query that passes the keywords to the LIKE command, which will match the provided keywords to similar ones in the database.
@@ -27,6 +37,21 @@ The seller server interfaces with the products table in the product database whi
 - ```clear``` - Clear the current cart. This will issue a DELETE command to delete everything from cart.
 
 - ```add``` - Add item to cart. Provide item ID and quantity, which will issue an INSERT query to the database. NOTE: it is possible to add more items than there are available to your cart. This will be addressed when transactions are added to the application.
+
+- ```create``` - Creates a user with username and password in the Users table of Customer database. 
+
+- ```login``` - Takes username and password as input. Returns successful if username password mache, otherwise fails.
+
+- ```logout``` - Logs out the current logged-in user.
+
+- ```purchase``` - Purchases item(s) with card information: name, card number and expiration 
+
+- ```feedback``` - User can give feedback for a seller as good or bad
+
+- ```rating``` - Fetches all the ratings from feedback table for a seller.
+
+- ```history``` - Fetches all purchases of a customer from the 'purchased' table
+
 
 ## Assumptions
 
