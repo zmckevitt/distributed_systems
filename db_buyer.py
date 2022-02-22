@@ -347,7 +347,7 @@ class BuyerService(service.marketplaceServicer):
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     service.add_marketplaceServicer_to_server(BuyerService(), server)
-    server.add_insecure_port('127.0.0.1:8090')
+    server.add_insecure_port('[::]:8090')
     server.start()
     try:
         while True:

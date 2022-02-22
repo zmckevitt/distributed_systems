@@ -3,8 +3,10 @@ import time
 import requests as reqs
 
 
-SERVER_IP = "127.0.0.1"
-SERVER_PORT = 5001
+#SERVER_IP = "http://127.0.0.1"
+SERVER_IP = "http://10.128.0.2"
+SERVER_PORT = "5001"
+BASE_URL = SERVER_IP+":"+SERVER_PORT
 
 # REST API allows for cookies when stored client side
 # cookie required to maintain login state
@@ -35,7 +37,7 @@ if __name__ == "__main__":
             search_category = input("Please enter search category: ")
             search_keywords = input("Please enter up to five keywords: ")
             data = {"category": int(search_category), "keywords":search_keywords}
-            url = "http://localhost:5001/cart/searchProduct"
+            url = BASE_URL+"/cart/searchProduct"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
@@ -47,7 +49,7 @@ if __name__ == "__main__":
             item_id = input("Please enter an item ID: ")
             item_quantity = input("Please enter an item quantity: ")
             data = {"item_id": item_id, "u_id": COOKIE_ID, "quantity": item_quantity}
-            url = "http://localhost:5001/cart/addItem"
+            url = BASE_URL+"/cart/addItem"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
@@ -59,7 +61,7 @@ if __name__ == "__main__":
             item_id = input("Please enter an item ID: ")
             item_quantity = input("Please enter an item quantity: ")
             data = {"item_id": item_id, "u_id": COOKIE_ID, "quantity": item_quantity}
-            url = "http://localhost:5001/cart/removeItem"
+            url = BASE_URL+"/cart/removeItem"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
@@ -69,7 +71,7 @@ if __name__ == "__main__":
 
         elif(message == "clear"):
             data = {"u_id" : COOKIE_ID}
-            url = "http://localhost:5001/cart/clear"
+            url = BASE_URL+"/cart/clear"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
@@ -79,7 +81,7 @@ if __name__ == "__main__":
 
         elif(message == "display"):
             data = {"u_id" : COOKIE_ID}
-            url = "http://localhost:5001/cart/display"
+            url = BASE_URL+"/cart/display"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
@@ -91,7 +93,7 @@ if __name__ == "__main__":
             username = input("Enter a username: ")
             password = input("Enter a password: ")
             data = {"username": username, "password": password}
-            url = "http://localhost:5001/user/createUser"
+            url = BASE_URL+"/user/createUser"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
@@ -104,7 +106,7 @@ if __name__ == "__main__":
             username = input("Enter a username: ")
             password = input("Enter a password: ")
             data = {"username": username, "password": password}
-            url = "http://localhost:5001/user/login"
+            url = BASE_URL+"/user/login"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
@@ -120,7 +122,7 @@ if __name__ == "__main__":
 
         elif(message == "logout"):
             data = {"u_id": COOKIE_ID}
-            url = "http://localhost:5001/user/logout"
+            url = BASE_URL+"/user/logout"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
@@ -136,7 +138,7 @@ if __name__ == "__main__":
             expiration = input("Enter card expiration: ")
 
             data = {"name": name, "number": number, "expiration": expiration, 'u_id' : COOKIE_ID}
-            url = "http://localhost:5001/purchase"
+            url = BASE_URL+"/purchase"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
@@ -155,7 +157,7 @@ if __name__ == "__main__":
                 item_review = "False"
 
             data = {"item_id": item_id, "item_review": item_review, "u_id": COOKIE_ID}
-            url = "http://localhost:5001/feedback"
+            url = BASE_URL+"/feedback"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
@@ -169,7 +171,7 @@ if __name__ == "__main__":
             s_id = input("Please provide a seller ID: ")
 
             data = {"s_id": s_id}
-            url = "http://localhost:5001/rating"
+            url = BASE_URL+"/rating"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
@@ -179,7 +181,7 @@ if __name__ == "__main__":
 
         elif (message == "history"):
             data = {"u_id": COOKIE_ID}
-            url = "http://localhost:5001/history"
+            url = BASE_URL+"/history"
             time_1 = time.time()
             response = reqs.post(url, data)
             time_2 = time.time()
