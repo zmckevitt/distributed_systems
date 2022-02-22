@@ -245,18 +245,21 @@ class BuyerService(service.marketplaceServicer):
             db_cursor.execute(pre_query)
 
             for row in db_cursor:
-                _id = row[0]
-                b_id = row[1]
-                quantity = row[2]
-                print(_id)
-                print(b_id)
-                print(quantity)
+                try:
+                    _id = row[0]
+                    b_id = row[1]
+                    quantity = row[2]
+                    sql_query = "INSERT INTO customer.purchased (id, b_id, quantity) " \
+                            + "VALUES (" + str(_id) + ", " + str(b_id) + ", " + str(quantity) + ");"
 
-            sql_query = "INSERT INTO customer.purchased (id, b_id, quantity) " \
-                        + "VALUES (" + str(_id) + ", " + str(b_id) + ", " + str(quantity) + ");"
+                    cus_cursor.execute(sql_query)
+                    cus_db.commit()
+                    print(_id)
+                    print(b_id)
+                    print(quantity)
+                except:
+                    break
 
-            cus_cursor.execute(sql_query)
-            cus_db.commit()
 
             # clear cart
             sql_query = "DELETE FROM product.cart WHERE b_id=" + str(u_id) + ";"
