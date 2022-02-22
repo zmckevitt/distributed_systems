@@ -1,4 +1,5 @@
 from flask import Flask, request
+import requests as reqs
 import grpc
 import marketplace_pb2_grpc as service
 import marketplace_pb2 as message
@@ -118,7 +119,7 @@ def purchase():
         'Content-Type': 'text/xml; charset=utf-8'
     }
 
-    response = requests.request("POST", url, headers=headers, data=payload)
+    response = reqs.request("POST", url, headers=headers, data=payload)
 
     # If unsuccessful, return "NO"
     if(response.text == "No"):
