@@ -240,10 +240,20 @@ class BuyerService(service.marketplaceServicer):
             # if invalid, exit
 
             # if valid, add item to purchase table FROM CART
+            pre_query = "SELECT id, b_id, quantity FROM product.cart WHERE product.cart.b_id=" + str(u_id) + ";"
+
+            db_cursor.execute(pre_query)
+
+            for row in db_cursor:
+                _id = row[0]
+                b_id = row[1]
+                quantity = row[2]
+                print(_id)
+                print(b_id)
+                print(quantity)
 
             sql_query = "INSERT INTO customer.purchased (id, b_id, quantity) " \
-                        + "SELECT id, b_id, quantity FROM product.cart WHERE product.cart.b_id=" \
-                        + str(u_id) + ";"
+                        + "VALUES (" + str(_id) + ", " + str(b_id) + ", " + str(quantity) + ");"
 
             cus_cursor.execute(sql_query)
             cus_db.commit()
