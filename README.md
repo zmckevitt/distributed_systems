@@ -65,8 +65,6 @@ Lastly, we assume that the MySQL database will always be hosted on the same mach
 
 The current state of the project is functional but not yet polished, mainly due to the nature of the assignment. As we add more to this project, it will become increasingly polished. In its current state, each of the API calls we were asked to implement are completely functional, but the current state of the project is less polished on the client sides. For example, we are returning raw database query information directly back to the user. As we are only implementing an API, we decided to focus our attention on implementing our API and ensuring that it works correctly.
 
-We currently do not have support for account creation, seller feedback/rating, buyer history, or transactions. We expect to implement these features in the coming weeks.
-
 ## Database Configuration
 
 There is a table called ```products``` in the ```product``` database running on ```localhost```. This table has 6 columns: name VARCHAR(32), category INT, id INT, keywords VARCHAR(40), item_condition BOOL, price DOUBLE.
