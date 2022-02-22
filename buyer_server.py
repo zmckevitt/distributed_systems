@@ -1,5 +1,4 @@
 from flask import Flask, request
-import requests
 import grpc
 import marketplace_pb2_grpc as service
 import marketplace_pb2 as message
@@ -219,5 +218,5 @@ class BuyerServer():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
     print('Server running with flask')
