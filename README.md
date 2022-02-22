@@ -93,51 +93,61 @@ Lastly, we need a table to keep track of users currently logged in:
 
 We determined timing benchmarks entirely client-side, measuring the timing difference between the sending of the command and the receiving of the response. We tested these benchmarks in two scenarios: communications between two processes on the same machine and communications between two different machines on the same LAN.
 
-### Same Machine
+### Configuration: Server and DB on Google Cloud and Client on PC
 
 Seller benchmarks: 
 
-- ```sell``` - 0.00077s
+- ```sell``` - 0.12314s
 
-- ```modify``` - 0.00492s
+- ```modify``` - 0.43276s
 
-- ```remove``` - 0.00827s
+- ```remove``` - 0.11799s
 
-- ```list``` - 0.00075s
+- ```list``` - 0.17842s
 
-Seller benchmark average: 0.0037s = 3.7ms
+- ```create``` - 0.54668s
+
+- ```login``` - 0.11099s
+
+- ```logout``` - 0.19256s
+
+- ```rating``` - 0.39720s
+
+
+Seller benchmark average: 0.2624675s = 262.46ms
 
 Buyer benchmarks:
 
-- ```search``` - 0.00105s
+- ```search``` - 0.42031s
 
-- ```display``` - 0.00063s
+- ```display``` - 0.40018s
 
-- ```remove``` - 0.00462s
+- ```remove``` - 0.42287s
 
-- ```clear``` - 0.00620s
+- ```clear``` - 0.13140s
 
-- ```add``` - 0.00620s
+- ```add``` - 0.56263s
 
--```create```- 0.91323
+-```create```- 0.91323s
 
--```login```- 0.23005
+-```login```- 0.23005s
 
--```logout```- 0.34269
+-```logout```- 0.34269s
 
--```purchase```- 0.
+-```purchase```- 0.60980s
 
--```feedback```- 0.
+-```feedback```- 0.39177
 
--```rating```- 0.16186
+-```rating```- 0.16186s
 
--```history```- 1.00593
+-```history```- 1.00593s
 
-Buyer benchmark Average: 0.00374 = 3.74ms
+Buyer benchmark Average: 0.46606 = 466.06ms
 
-Same machine average: 3.72ms
+Overal Average: 386.22ms
 
-### LAN Machines
+
+### Congiguration: LAN Machines (For previous socket config)
 
 Seller benchmarks:
 
