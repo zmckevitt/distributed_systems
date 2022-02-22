@@ -1,9 +1,6 @@
-#from concurrent import futures
-#import time
 from flask import Flask, request
+import requests
 import grpc
-#import mysql.connector
-#import sys
 import marketplace_pb2_grpc as service
 import marketplace_pb2 as message
 app = Flask(__name__)
@@ -101,10 +98,37 @@ def purchase():
     number = request.form.get('number')
     expiration = request.form.get('expiration')
     u_id = int(request.form.get('u_id'))
-    bs = BuyerServer()
-    res = bs.purchase(name, number, expiration, u_id)
-    print("Response = ", res)
-    return str(res)
+
+    # SOAP Communications
+
+    # location of transaction service
+    url = "http://localhost:6000/transaction"
+
+    # XML payload
+    # From: https://www.geeksforgeeks.org/making-soap-api-calls-using-python/
+    payload = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" \
+            + "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" \
+            + "<soap:Body>\n"\
+            + "<name>" + name + "</name>\n" \
+            + "<number>" + number + "</number>\n" \
+            + "<expiration>" + expiration + "</expiration>\n" \
+            + "</soap:Body>\n</soap:Envelope>"
+
+    # headers
+    headers = {
+        'Content-Type': 'text/xml; charset=utf-8'
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    # If unsuccessful, return "NO"
+    if(response.text == "No"):
+        return "Credit card declined"
+    else:
+        bs = BuyerServer()
+        res = bs.purchase(name, number, expiration, u_id)
+        print("Response = ", res)
+        return str(res)
 
 @app.route('/feedback', methods = ['POST'])
 def feedback():
