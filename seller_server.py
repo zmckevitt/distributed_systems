@@ -1,15 +1,5 @@
-# import sys
-# import socket
-# import mysql.connector
-# from _thread import *
-# import threading
-
-#from concurrent import futures
-#import time
 from flask import Flask, request
 import grpc
-#import mysql.connector
-#import sys
 import marketplace_pb2_grpc as service
 import marketplace_pb2 as message
 app = Flask(__name__)
@@ -143,5 +133,5 @@ class SellerServer():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='localhost', port=5000, debug=True)
     print('Server running with flask')

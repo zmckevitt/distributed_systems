@@ -12,8 +12,6 @@ SERVER_PORT = 8080
 COOKIE_ID = -1
 
 if __name__ == "__main__":
-    # s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # s.connect((SERVER_IP, SERVER_PORT))
 
     print("--------Commands--------")
     print("1. sell - list an item for sale")
@@ -26,7 +24,6 @@ if __name__ == "__main__":
     print("8. rating - get your seller rating (must be logged in)")
 
     while True:
-        set_cookie = False
         message = input("> ")            
 
         if(message == "sell"):
@@ -47,9 +44,12 @@ if __name__ == "__main__":
                     "price" : item_price,
                     "u_id": COOKIE_ID}
             url = "http://localhost:5000/products/sell"
+            time_1 = time.time()
             response = reqs.post(url, data)
+            time_2 = time.time()
             print(response.status_code)
             print(response.text)
+            print("(Took " + str(time_2-time_1) + " seconds)")
 
         elif(message == "modify"):
             item_id = input("Please enter the item ID: ")
@@ -59,9 +59,12 @@ if __name__ == "__main__":
                     "price": item_price,
                     "u_id": COOKIE_ID}
             url = "http://localhost:5000/products/modify"
+            time_1 = time.time()
             response = reqs.post(url, data)
+            time_2 = time.time()
             print(response.status_code)
             print(response.text)
+            print("(Took " + str(time_2-time_1) + " seconds)")
 
         elif(message == "remove"):
             item_id = input("Please enter the item ID: ")
@@ -71,38 +74,47 @@ if __name__ == "__main__":
                     "quantity": item_quantity,
                     "u_id": COOKIE_ID}
             url = "http://localhost:5000/products/remove"
+            time_1 = time.time()
             response = reqs.post(url, data)
+            time_2 = time.time()
             print(response.status_code)
             print(response.text)
+            print("(Took " + str(time_2-time_1) + " seconds)")
 
         elif(message == "list"):
             data = {"u_id": COOKIE_ID}
             url = "http://localhost:5000/products/list"
+            time_1 = time.time()
             response = reqs.post(url, data)
+            time_2 = time.time()
             print(response.status_code)
             print(response.text)
+            print("(Took " + str(time_2-time_1) + " seconds)")
 
         elif(message == "create"):
             username = input("Enter a username: ")
             password = input("Enter a password: ")
             data = {"username": username, "password": password}
             url = "http://localhost:5000/user/createUser"
+            time_1 = time.time()
             response = reqs.post(url, data)
+            time_2 = time.time()
             print(response.status_code)
             print(response.text)
+            print("(Took " + str(time_2-time_1) + " seconds)")
 
         elif(message == "login"):
-
-            # will need to set COOKIE_ID from response
-            set_cookie = True
 
             username = input("Enter a username: ")
             password = input("Enter a password: ")
             data = {"username": username, "password": password}
             url = "http://localhost:5000/user/login"
+            time_1 = time.time()
             response = reqs.post(url, data)
+            time_2 = time.time()
             print(response.status_code)
             print(response.text)
+            print("(Took " + str(time_2-time_1) + " seconds)")
 
             COOKIE_ID = int(response.text[7:-2])
             if(COOKIE_ID != -1):
@@ -113,37 +125,25 @@ if __name__ == "__main__":
         elif(message == "logout"):
             data = {"u_id": COOKIE_ID}
             url = "http://localhost:5000/user/logout"
+            time_1 = time.time()
             response = reqs.post(url, data)
+            time_2 = time.time()
             print(response.status_code)
             print(response.text)
+            print("(Took " + str(time_2-time_1) + " seconds)")
             COOKIE_ID = -1
 
         elif (message == "rating"):
 
             data = {"s_id": COOKIE_ID}
             url = "http://localhost:5000/rating"
+            time_1 = time.time()
             response = reqs.post(url, data)
+            time_2 = time.time()
             print(response.status_code)
             print(response.text)
+            print("(Took " + str(time_2-time_1) + " seconds)")
 
         else:
             print("Please enter a valid message.")
             continue
-
-        # time_1 = time.time()
-        # s.sendall(message.encode("utf-8"))
-        # data = s.recv(1024)
-        # time_2 = time.time()
-        # data = data.decode('utf-8')
-
-        # if(set_cookie):
-        #     COOKIE_ID = int(data)
-        #     if(COOKIE_ID != -1):
-        #         print("Logged in with UID: " + str(COOKIE_ID))
-        #     else:
-        #         print("Invalid username or password.")
-
-        # else:
-        #     print(data)
-
-        # print("(Took " + str(time_2-time_1) + " seconds)")
