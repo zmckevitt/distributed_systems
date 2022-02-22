@@ -133,5 +133,5 @@ class SellerServer():
 
 
 if __name__ == "__main__":
-    app.run(host='34.106.129.237', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
     print('Server running with flask')
