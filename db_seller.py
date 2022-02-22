@@ -10,14 +10,14 @@ import marketplace_pb2 as message
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
 prod_db = mysql.connector.connect(
-    host="http://10.180.0.6",
+    host="10.180.0.6",
     user="prod",
     password="prodpassword",
     database="product"
 )
 
 cus_db = mysql.connector.connect(
-    host="http://10.180.0.5",
+    host="10.180.0.5",
     user="prod",
     password="prodpassword",
     database="customer"
@@ -225,7 +225,7 @@ class SellerService(service.marketplaceServicer):
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     service.add_marketplaceServicer_to_server(SellerService(), server)
-    server.add_insecure_port('127.0.0.1:8080')
+    server.add_insecure_port('10.180.0.7:8080')
     server.start()
     try:
         while True:
