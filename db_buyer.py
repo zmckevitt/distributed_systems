@@ -6,11 +6,21 @@ import sys
 
 import marketplace_pb2_grpc as service
 import marketplace_pb2 as message
+import pymongo
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
+myclient = pymongo.MongoClient("mongodb://mongoAdmin:Abstract09@localhost:27017")
+my_mongo_db = myclient["product"]
+dblist = myclient.list_database_names()
+if "product" in dblist:
+    print("Found database")
+else:
+    print("Database not found")
+
 prod_db = mysql.connector.connect(
     host="10.180.0.6",
+    #host="127.0.0.1",
     user="prod",
     password="prodpassword",
     database="product"
@@ -18,6 +28,7 @@ prod_db = mysql.connector.connect(
 
 cus_db = mysql.connector.connect(
     host="10.180.0.5",
+    #host="127.0.0.1",
     user="prod",
     password="prodpassword",
     database="customer"
@@ -25,7 +36,16 @@ cus_db = mysql.connector.connect(
 
 class BuyerService(service.marketplaceServicer):
     def search(self, request, context):
-        sql_query = "SELECT * FROM products " \
+        #Mongo implementation
+        products = my_mongo_db.get_collection("products")
+        rows = products.find({ "category": request.category, "keywords" : request.keywords})
+        data = ""
+        for row in rows:
+            data += str(row) + "\n"
+        ret = message.Response(text=data)
+
+        #MySQL implementation
+        """sql_query = "SELECT * FROM products " \
                     "WHERE category = " + str(request.category) + " AND keywords LIKE '%" + request.keywords + "%';"
         print(sql_query)
         db_cursor.execute(sql_query)
@@ -37,12 +57,40 @@ class BuyerService(service.marketplaceServicer):
             data = "No matching data found."
         prod_db.commit()
         ret = message.Response(text=data)
-        print(ret)
+        print(ret) """
         return ret
 
     # ISSUE: can add items not listed for sale to cart
     # FIX: sql joins
     def add(self, request, context):
+        # Mongo implementation
+        cart = my_mongo_db.get_collection("cart")
+        data = ""
+        if request.u_id == -1:
+            data = "User is not logged in."
+        else:
+            print("User already logged...")
+            rows = cart.find({ "item_id": request.item_id, "b_id" : request.u_id})
+            count = 0
+            for row in rows:
+                count +=1
+            if count == 0:
+                inserted = cart.insert_one({"item_id": request.item_id, "b_id": request.u_id, "quantity": request.quantity})
+                inserted_count=1
+                if inserted_count>0:
+                    data = "Item added successfully."
+                else:
+                    data = "Item could not be added"
+            else:
+                update_count = cart.update_one({"item_id":request.item_id, "b_id": request.u_id}, {"$set":{"quantity": request.quantity}})
+                update_count=1
+                if update_count > 0:
+                    data = "Item added successfully."
+                else:
+                    data = "Item could not be added"
+        ret = message.Response(text=data)
+
+        """
         print("u_id = ", request.u_id )
         if (request.u_id == -1):
             data = "User is not logged in."
@@ -71,10 +119,23 @@ class BuyerService(service.marketplaceServicer):
             prod_db.commit()
             print("commited query")
         ret = message.Response(text=data)
-        print(ret)
+        print(ret) """
         return ret
 
     def remove(self, request, context):
+        #Mongo implementation
+        cart = my_mongo_db.get_collection("cart")
+        data = ""
+        row = cart.find_one({"item_id": request.item_id, "b_id": request.u_id})
+        curr_quantity = row.get('quantity')
+        updated = cart.update_one({"item_id": request.item_id, "quantity": {"$gte":request.quantity}}, {"$set": {"quantity": curr_quantity-request.quantity}})
+        update_count=1
+        if update_count>0:
+            data = "Item(s) removed successfully."
+        else:
+            data = "Item(s) could not be removed"
+        ret = message.Response(text=data)
+        """
         item_id = request.item_id
         item_quantity = request.quantity
         u_id = request.u_id
@@ -95,10 +156,22 @@ class BuyerService(service.marketplaceServicer):
                 data = "Item(s) could not be removed"
 
         ret = message.Response(text=data)
-        print(ret)
+        print(ret)  """
         return ret
 
     def clear(self, request, context):
+        # Mongo implementation
+        cart = my_mongo_db.get_collection("cart")
+        data = ""
+        deleted = cart.delete_many({"b_id": request.u_id})
+        del_count=1
+        if del_count>0:
+            data = "Cart cleared successfully."
+        else:
+            data = "Cart could not be cleared"
+        ret = message.Response(text=data)
+
+        """
         u_id = request.u_id
         if(u_id == -1):
             data = "User is not logged in."
@@ -114,10 +187,19 @@ class BuyerService(service.marketplaceServicer):
                 data = "Cart could not be cleared"
 
         ret = message.Response(text=data)
-        print(ret)
+        print(ret)  """
         return ret
 
     def display(self, request, context):
+        # Mongo implementation
+        cart = my_mongo_db.get_collection("cart")
+        rows = cart.find({"b_id":request.u_id})
+        data = ""
+        for row in rows:
+            data += str(row) + "\n"
+        ret = message.Response(text=data)
+
+        """
         u_id = request.u_id
         if(u_id == -1):
             data = "User is not logged in."
@@ -134,7 +216,7 @@ class BuyerService(service.marketplaceServicer):
             print(data)
 
         ret = message.Response(text=data)
-        print(ret)
+        print(ret)  """
         return ret
 
     def feedback(self, request, context):
@@ -370,6 +452,7 @@ def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     service.add_marketplaceServicer_to_server(BuyerService(), server)
     server.add_insecure_port('10.180.0.4:8090')
+    #server.add_insecure_port('127.0.0.1:8090')
     server.start()
     try:
         while True:

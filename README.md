@@ -67,6 +67,16 @@ The current state of the project is functional but not yet polished, mainly due 
 
 ## Database Configuration
 
+We have MongoDB for Raft Implementation of ```product``` databese (It internally uses Raft and we can configure number of instances of it), For ```Customer``` database we are using MySQL database.
+
+MongoDB configuration:
+
+We have a database named ```product``` which has two collections named ```products``` and ```cart```
+Command to create a collection: ```db.createCollection("products")``` and ```db.createCollection("cart")``` 
+These collections holds documents (key-value pairs instead of rows in MySQL)
+
+MySQL DB configuration:
+
 There is a table called ```products``` in the ```product``` database running on ```localhost```. This table has 6 columns: name VARCHAR(32), category INT, id INT, keywords VARCHAR(40), item_condition BOOL, price DOUBLE.
 
 To get set up with the database, first install mysql. In the mysql console, execute the following commands to create a new user. I will use the credentials given in the server files:

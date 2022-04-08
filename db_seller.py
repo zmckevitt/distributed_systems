@@ -6,11 +6,21 @@ import sys
 
 import marketplace_pb2_grpc as service
 import marketplace_pb2 as message
+import pymongo
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
+myclient = pymongo.MongoClient("mongodb://mongoAdmin:Abstract09@localhost:27017")
+my_mongo_db = myclient["product"]
+dblist = myclient.list_database_names()
+if "product" in dblist:
+    print("Found database")
+else:
+    print("Database not found")
+
 prod_db = mysql.connector.connect(
     host="10.180.0.6",
+    #host="127.0.0.1",
     user="prod",
     password="prodpassword",
     database="product"
@@ -18,6 +28,7 @@ prod_db = mysql.connector.connect(
 
 cus_db = mysql.connector.connect(
     host="10.180.0.5",
+    #host="127.0.0.1",
     user="prod",
     password="prodpassword",
     database="customer"
@@ -26,6 +37,26 @@ cus_db = mysql.connector.connect(
 class SellerService(service.marketplaceServicer):
 
     def sell(self, request, context):
+        # Mongo implementation
+        products = my_mongo_db.get_collection("products")
+        data = ""
+        if request.u_id == -1:
+            data = "User is not logged in."
+        else:
+            max_row = products.find_one(sort=[("id", pymongo.DESCENDING)])
+            max_id = 0
+            if max_row is not None:
+                max_id = max_row.get("id")
+            print(max_id)
+
+            new_id=max_id+1
+            rows = products.insert_one(
+                {"name": request.name, "category": request.category, "id": new_id, "keywords": request.keywords,
+                 "price": request.price, "s_id": request.u_id})
+            data = "Item listed successfully."
+        ret = message.Response(text=data)
+
+        """
         item_name = request.name
         item_category = request.category
         item_keywords = request.keywords
@@ -57,10 +88,21 @@ class SellerService(service.marketplaceServicer):
             prod_db.commit()
 
         ret = message.Response(text=data)
-        print(ret)
+        print(ret)  """
         return ret
 
     def modify(self, request, context):
+        # Mongo implementation
+        products = my_mongo_db.get_collection("products")
+        data = ""
+        if request.u_id == -1:
+            data = "User is not logged in."
+        else:
+            products.update_one({"id": request.id, "s_id": request.u_id}, {"$set": {"price": request.price}})
+            data = "Price updated successfully."
+        ret = message.Response(text=data)
+
+        """
         item_id = request.id
         new_price = request.price
         u_id = request.u_id
@@ -75,10 +117,22 @@ class SellerService(service.marketplaceServicer):
             prod_db.commit()
 
         ret = message.Response(text=data)
-        print(ret)
+        print(ret)  """
         return ret
 
     def removeListing(self, request, context):
+        # Mongo implementation
+        products = my_mongo_db.get_collection("products")
+        data = ""
+        if request.u_id == -1:
+            data = "User is not logged in."
+        else:
+            for i in range(request.quantity):
+                products.delete_one({"id": request.id, "s_id": request.u_id})
+            data = "Entry removed."
+        ret = message.Response(text=data)
+
+        """
         item_id = request.id
         item_quantity = request.quantity
         u_id = request.u_id
@@ -93,10 +147,20 @@ class SellerService(service.marketplaceServicer):
             prod_db.commit()
 
         ret = message.Response(text=data)
-        print(ret)
+        print(ret)  """
         return ret
 
     def list(self, request, context):
+        # Mongo implementation
+        products = my_mongo_db.get_collection("products")
+        rows = products.find({"s_id": request.u_id})
+        data = ""
+        for row in rows:
+            data += str(row) + "\n"
+        ret = message.Response(text=data)
+
+
+        """
         u_id = request.u_id
         if(u_id == -1):
             data = "User is not logged in."
@@ -110,7 +174,7 @@ class SellerService(service.marketplaceServicer):
                 data = "Database is empty."
 
         ret = message.Response(text=data)
-        print(ret)
+        print(ret)  """
         return ret
 
     def login(self, request, context):
@@ -226,6 +290,7 @@ def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     service.add_marketplaceServicer_to_server(SellerService(), server)
     server.add_insecure_port('10.180.0.7:8080')
+    #server.add_insecure_port('127.0.0.1:8080')
     server.start()
     try:
         while True:

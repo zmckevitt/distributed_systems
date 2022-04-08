@@ -103,6 +103,7 @@ def purchase():
 
     # location of transaction service
     url = "http://10.180.0.8:6000/transaction"
+    #url = "http://127.0.0.1:6000/transaction"
 
     # XML payload
     # From: https://www.geeksforgeeks.org/making-soap-api-calls-using-python/
@@ -162,6 +163,7 @@ def history():
 class BuyerServer():
     def __init__(self):
         self.host = '10.180.0.4'
+        #self.host = '127.0.0.1'
         self.port = 8090
 
         self.channel = grpc.insecure_channel(
@@ -220,4 +222,5 @@ class BuyerServer():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
+    #app.run(host='127.0.0.1', port=5001, debug=True)
     print('Server running with flask')

@@ -91,6 +91,7 @@ def rating():
 class SellerServer():
     def __init__(self):
         self.host = '10.180.0.7'
+        #self.host = '127.0.0.1'
         self.port = 8080
 
         self.channel = grpc.insecure_channel(
@@ -134,4 +135,5 @@ class SellerServer():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
+    #app.run(host='127.0.0.1', port=5000, debug=True)
     print('Server running with flask')
