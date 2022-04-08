@@ -34,6 +34,12 @@ cus_db = mysql.connector.connect(
     database="customer"
 )
 
+# set up sockets
+# send query to database group
+# return result of query
+def pass_query(query):
+    pass
+
 class SellerService(service.marketplaceServicer):
 
     def sell(self, request, context):
@@ -185,6 +191,7 @@ class SellerService(service.marketplaceServicer):
                     + "INNER JOIN passwords ON users.id=passwords.id " \
                     + "WHERE passwords.password = \"" + password + "\" " \
                     + "and users.name = \"" + username +"\";"
+
 
         cus_cursor.execute(sql_query)
 
