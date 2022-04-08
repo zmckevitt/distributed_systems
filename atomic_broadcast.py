@@ -57,6 +57,9 @@ def formSequence(req_id, send_id, query):
 	return req
 
 def queryDatabase(query):
+
+	return query
+
 	cus_cursor.execute(sql_query)
     cus_db.commit()
     data = ""
