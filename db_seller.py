@@ -18,21 +18,21 @@ if "product" in dblist:
 else:
     print("Database not found")
 
-prod_db = mysql.connector.connect(
-    host="10.180.0.6",
-    #host="127.0.0.1",
-    user="prod",
-    password="prodpassword",
-    database="product"
-)
+# prod_db = mysql.connector.connect(
+#     host="10.180.0.6",
+#     #host="127.0.0.1",
+#     user="prod",
+#     password="prodpassword",
+#     database="product"
+# )
 
-cus_db = mysql.connector.connect(
-    host="10.180.0.5",
-    #host="127.0.0.1",
-    user="prod",
-    password="prodpassword",
-    database="customer"
-)
+# cus_db = mysql.connector.connect(
+#     host="10.180.0.5",
+#     #host="127.0.0.1",
+#     user="prod",
+#     password="prodpassword",
+#     database="customer"
+# )
 
 # set up sockets
 # send query to database group
