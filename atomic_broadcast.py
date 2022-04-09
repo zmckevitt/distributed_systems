@@ -60,7 +60,7 @@ def queryDatabase(query):
 
 	# return query
 
-	cus_cursor.execute(sql_query)
+	cus_cursor.execute(query)
 	cus_db.commit()
 	data = ""
 	for x in cus_cursor:
