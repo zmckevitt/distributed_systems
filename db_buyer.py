@@ -3,12 +3,15 @@ import time
 import grpc
 import mysql.connector
 import sys
+import socket
+import random
 
 import marketplace_pb2_grpc as service
 import marketplace_pb2 as message
 import pymongo
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
+server_list = ["10.180.0.15", "10.180.0.16", "10.180.0.17", "10.180.0.18", "10.180.0.19"]
 
 myclient = pymongo.MongoClient("mongodb://mongoAdmin:Abstract09@localhost:27017")
 my_mongo_db = myclient["product"]
@@ -18,21 +21,31 @@ if "product" in dblist:
 else:
     print("Database not found")
 
-prod_db = mysql.connector.connect(
-    host="10.180.0.6",
-    #host="127.0.0.1",
-    user="prod",
-    password="prodpassword",
-    database="product"
-)
+# prod_db = mysql.connector.connect(
+#     host="10.180.0.6",
+#     #host="127.0.0.1",
+#     user="prod",
+#     password="prodpassword",
+#     database="product"
+# )
 
-cus_db = mysql.connector.connect(
-    host="10.180.0.5",
-    #host="127.0.0.1",
-    user="prod",
-    password="prodpassword",
-    database="customer"
-)
+# cus_db = mysql.connector.connect(
+#     host="10.180.0.5",
+#     #host="127.0.0.1",
+#     user="prod",
+#     password="prodpassword",
+#     database="customer"
+# )
+
+# set up sockets
+# send query to database group
+# return result of query
+def pass_query(query):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # choose random server to send to
+    s.sendto(query.encode(), (server_list[random.randint(0,len(server_list)-1)], 8000))
+    resp = s.recvfrom(1024)
+    return resp
 
 class BuyerService(service.marketplaceServicer):
     def search(self, request, context):

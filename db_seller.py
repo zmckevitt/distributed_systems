@@ -3,12 +3,15 @@ import time
 import grpc
 import mysql.connector
 import sys
+import socket
+import random
 
 import marketplace_pb2_grpc as service
 import marketplace_pb2 as message
 import pymongo
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
+server_list = ["10.180.0.15", "10.180.0.16", "10.180.0.17", "10.180.0.18", "10.180.0.19"]
 
 myclient = pymongo.MongoClient("mongodb://mongoAdmin:Abstract09@localhost:27017")
 my_mongo_db = myclient["product"]
@@ -38,7 +41,11 @@ else:
 # send query to database group
 # return result of query
 def pass_query(query):
-    pass
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # choose random server to send to
+    s.sendto(query.encode(), (server_list[random.randint(0,len(server_list)-1)], 8000))
+    resp = s.recvfrom(1024)
+    return resp
 
 class SellerService(service.marketplaceServicer):
 
@@ -193,23 +200,25 @@ class SellerService(service.marketplaceServicer):
                     + "and users.name = \"" + username +"\";"
 
 
-        cus_cursor.execute(sql_query)
+        # cus_cursor.execute(sql_query)
 
-        # get the returned user id
-        # u_id will be -1 if no matching user is found
-        u_id = -1
-        for x in cus_cursor:
-            if(isinstance(x[0], int)):
-                u_id = x[0]
+        # # get the returned user id
+        # # u_id will be -1 if no matching user is found
+        # u_id = -1
+        # for x in cus_cursor:
+        #     if(isinstance(x[0], int)):
+        #         u_id = x[0]
 
 
-        # if user exists, set their status to logged in
-        if(u_id != -1):
-            sql_query = "UPDATE logged SET logged=1 WHERE id=" + str(u_id) + ";"
-            cus_cursor.execute(sql_query)
+        # # if user exists, set their status to logged in
+        # if(u_id != -1):
+        #     sql_query = "UPDATE logged SET logged=1 WHERE id=" + str(u_id) + ";"
+        #     cus_cursor.execute(sql_query)
 
-        cus_db.commit()
-        data = str(u_id)
+        # cus_db.commit()
+        # data = str(u_id)
+
+        data = pass_query("login")
 
         ret = message.Response(text=data)
         return ret
@@ -220,9 +229,9 @@ class SellerService(service.marketplaceServicer):
             data = "User is not logged in."
 
         else:
-            sql_query = "UPDATE logged SET logged=0 WHERE id=" + str(u_id) + ";"
-            cus_cursor.execute(sql_query)
-            cus_db.commit()
+            # sql_query = "UPDATE logged SET logged=0 WHERE id=" + str(u_id) + ";"
+            # cus_cursor.execute(sql_query)
+            # cus_db.commit()
             data = "Logged out."
         ret = message.Response(text=data)
         return ret
@@ -231,62 +240,64 @@ class SellerService(service.marketplaceServicer):
         name = request.username
         password = request.password
 
-        cus_cursor.execute("SELECT MAX(id) FROM customer.users;")
-        data = ""
+        # cus_cursor.execute("SELECT MAX(id) FROM customer.users;")
+        # data = ""
 
-        new_id = 0
-        for x in cus_cursor:
-            if(isinstance(x[0], int)):
-                new_id = x[0]+1
-
-
-        sql_query = "INSERT INTO users " \
-                    + "(name, id, nitems) " \
-                    + "VALUES " \
-                    + "(\"" + name + "\", " + str(new_id) + ", " + "0);"
-
-        cus_cursor.execute(sql_query)
-
-        sql_query = "INSERT INTO passwords "\
-                    + "(id, password) " \
-                    + "VALUES " \
-                    + "(" + str(new_id) + ", " + "\"" + password + "\")"
-
-        cus_cursor.execute(sql_query)
-
-        sql_query = "INSERT INTO feedback "\
-                    + "(id, pos, neg) " \
-                    + "VALUES " \
-                    + "(" + str(new_id) + ", 0, 0);"
-
-        cus_cursor.execute(sql_query)
+        # new_id = 0
+        # for x in cus_cursor:
+        #     if(isinstance(x[0], int)):
+        #         new_id = x[0]+1
 
 
-        # logged table might be useless if we are using client side cookies to track login
-        sql_query = "INSERT INTO logged "\
-                    + "(id, logged) " \
-                    + "VALUES " \
-                    + "(" + str(new_id) + ", 0);"
+        # sql_query = "INSERT INTO users " \
+        #             + "(name, id, nitems) " \
+        #             + "VALUES " \
+        #             + "(\"" + name + "\", " + str(new_id) + ", " + "0);"
 
-        cus_cursor.execute(sql_query)
+        # cus_cursor.execute(sql_query)
 
-        data = "Customer added successfully."
-        cus_db.commit()
+        # sql_query = "INSERT INTO passwords "\
+        #             + "(id, password) " \
+        #             + "VALUES " \
+        #             + "(" + str(new_id) + ", " + "\"" + password + "\")"
+
+        # cus_cursor.execute(sql_query)
+
+        # sql_query = "INSERT INTO feedback "\
+        #             + "(id, pos, neg) " \
+        #             + "VALUES " \
+        #             + "(" + str(new_id) + ", 0, 0);"
+
+        # cus_cursor.execute(sql_query)
+
+
+        # # logged table might be useless if we are using client side cookies to track login
+        # sql_query = "INSERT INTO logged "\
+        #             + "(id, logged) " \
+        #             + "VALUES " \
+        #             + "(" + str(new_id) + ", 0);"
+
+        # cus_cursor.execute(sql_query)
+
+        # data = "Customer added successfully."
+        # cus_db.commit()
+        data = pass_query("create user")
 
         ret = message.Response(text=data)
         return ret
 
     def rating(self, request, context):
         s_id = request.s_id        
-        sql_query = "SELECT pos, neg FROM feedback where id=" + str(s_id) + ";"
-        cus_cursor.execute(sql_query)
+        # sql_query = "SELECT pos, neg FROM feedback where id=" + str(s_id) + ";"
+        # cus_cursor.execute(sql_query)
 
-        data = ""
-        for x in cus_cursor:
-            data += str(x) + "\n"
+        # data = ""
+        # for x in cus_cursor:
+        #     data += str(x) + "\n"
 
-        if(len(data) == 0):
-            data = "User not logged in"
+        # if(len(data) == 0):
+        #     data = "User not logged in"
+        data = pass_query("rating")
 
         ret = message.Response(text=data)
         print(ret)
