@@ -12,13 +12,13 @@ import pymongo
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 server_list = ["10.128.0.4", "10.128.0.5", "10.128.0.6", "10.128.0.7", "10.128.0.8"]
-# myclient = pymongo.MongoClient("mongodb://mongoAdmin:Abstract09@localhost:27017")
-# my_mongo_db = myclient["product"]
-# dblist = myclient.list_database_names()
-# if "product" in dblist:
-#     print("Found database")
-# else:
-#     print("Database not found")
+myclient = pymongo.MongoClient("mongodb://mongoAdmin:Abstract09@localhost:27017")
+my_mongo_db = myclient["product"]
+dblist = myclient.list_database_names()
+if "product" in dblist:
+    print("Found database")
+else:
+    print("Database not found")
 
 # prod_db = mysql.connector.connect(
 #     host="10.180.0.6",
@@ -283,8 +283,8 @@ class BuyerService(service.marketplaceServicer):
         return ret
 
     def rating(self, request, context):
-        # s_id = request.s_id        
-        # sql_query = "SELECT pos, neg FROM feedback where id=" + str(s_id) + ";"
+        s_id = request.s_id        
+        sql_query = "SELECT pos, neg FROM feedback where id=" + str(s_id) + ";"
         # cus_cursor.execute(sql_query)
 
         # data = ""
@@ -293,28 +293,28 @@ class BuyerService(service.marketplaceServicer):
 
         # if(len(data) == 0):
         #     data = "Seller not found."
-        data = pass_query("rating")
+        data = pass_query(sql_query)
         ret = message.Response(text=data)
         print(ret)
         return ret
 
     def history(self, request, context):
-        # u_id = request.u_id
-        # if(u_id == -1):
-        #     data = "User is not logged in."
-        # else:
-        #     sql_query = "SELECT * FROM customer.purchased WHERE b_id=" + str(u_id) + ";"
-        #     cus_cursor.execute(sql_query)
+        u_id = request.u_id
+        if(u_id == -1):
+            data = "User is not logged in."
+        else:
+            sql_query = "SELECT * FROM customer.purchased WHERE b_id=" + str(u_id) + ";"
+            # cus_cursor.execute(sql_query)
 
-        #     data = ""
-        #     for x in cus_cursor:
-        #         data += str(x) + "\n"
+            # data = ""
+            # for x in cus_cursor:
+            #     data += str(x) + "\n"
 
-        #     if(len(data) == 0):
-        #         data="User has no purchase history."
+            # if(len(data) == 0):
+            #     data="User has no purchase history."
 
-        #     cus_db.commit()
-        data = pass_query("rating")
+            # cus_db.commit()
+            data = pass_query(sql_query)
         ret = message.Response(text=data)
         print(ret)
         return ret
@@ -369,13 +369,13 @@ class BuyerService(service.marketplaceServicer):
         return ret
 
     def login(self, request, context):
-        # username = request.username
-        # password = request.password
+        username = request.username
+        password = request.password
 
-        # sql_query = "SELECT users.id FROM users " \
-        #             + "INNER JOIN passwords ON users.id=passwords.id " \
-        #             + "WHERE passwords.password = \"" + password + "\" " \
-        #             + "and users.name = \"" + username +"\";"
+        sql_query = "SELECT users.id FROM users " \
+                    + "INNER JOIN passwords ON users.id=passwords.id " \
+                    + "WHERE passwords.password = \"" + password + "\" " \
+                    + "and users.name = \"" + username +"\";"
 
         # cus_cursor.execute(sql_query)
 
@@ -394,7 +394,7 @@ class BuyerService(service.marketplaceServicer):
 
         # cus_db.commit()
         # data = str(u_id)
-        data = pass_query("login")
+        data = pass_query(sql_query)
         ret = message.Response(text=data)
         return ret
 
@@ -412,8 +412,12 @@ class BuyerService(service.marketplaceServicer):
         return ret
 
     def createUser(self, request, context):
-        # name = request.username
-        # password = request.password
+        name = request.username
+        password = request.password
+
+        sql_query = "SELECT MAX(id) FROM customer.users;"
+        data = pass_query(sql_query)
+        print("received data:", data)
 
         # cus_cursor.execute("SELECT MAX(id) FROM customer.users;")
         # data = ""
@@ -456,7 +460,6 @@ class BuyerService(service.marketplaceServicer):
 
         # data = "Customer added successfully."
         # cus_db.commit()
-        data = pass_query("login")
         ret = message.Response(text=data)
         return ret
 

@@ -199,6 +199,8 @@ class SellerService(service.marketplaceServicer):
                     + "WHERE passwords.password = \"" + password + "\" " \
                     + "and users.name = \"" + username +"\";"
 
+        data = pass_query(sql_query)
+        print("received data:", data)
 
         # cus_cursor.execute(sql_query)
 
@@ -217,8 +219,6 @@ class SellerService(service.marketplaceServicer):
 
         # cus_db.commit()
         # data = str(u_id)
-
-        data = pass_query("login")
 
         ret = message.Response(text=data)
         return ret
@@ -239,6 +239,10 @@ class SellerService(service.marketplaceServicer):
     def createUser(self, request, context):
         name = request.username
         password = request.password
+
+        sql_query = "SELECT MAX(id) FROM customer.users;"
+        data = pass_query(sql_query)
+        print("received data:", data)
 
         # cus_cursor.execute("SELECT MAX(id) FROM customer.users;")
         # data = ""
@@ -281,14 +285,13 @@ class SellerService(service.marketplaceServicer):
 
         # data = "Customer added successfully."
         # cus_db.commit()
-        data = pass_query("create user")
 
         ret = message.Response(text=data)
         return ret
 
     def rating(self, request, context):
         s_id = request.s_id        
-        # sql_query = "SELECT pos, neg FROM feedback where id=" + str(s_id) + ";"
+        sql_query = "SELECT pos, neg FROM feedback where id=" + str(s_id) + ";"
         # cus_cursor.execute(sql_query)
 
         # data = ""
@@ -297,7 +300,7 @@ class SellerService(service.marketplaceServicer):
 
         # if(len(data) == 0):
         #     data = "User not logged in"
-        data = pass_query("rating")
+        data = pass_query(sql_query)
 
         ret = message.Response(text=data)
         print(ret)

@@ -3,12 +3,12 @@ import sys
 import time
 import mysql.connector
 
-# cus_db = mysql.connector.connect(
-#     host="127.0.0.1",
-#     user="prod",
-#     password="prodpassword",
-#     database="customer"
-# )
+cus_db = mysql.connector.connect(
+    host="127.0.0.1",
+    user="prod",
+    password="prodpassword",
+    database="customer"
+)
 
 # convert to IPs later
 # make sure to include localhost!
@@ -58,17 +58,17 @@ def formSequence(req_id, send_id, query):
 
 def queryDatabase(query):
 
-	return query
+	# return query
 
-	# cus_cursor.execute(sql_query)
- #    cus_db.commit()
- #    data = ""
- #    for x in cus_cursor:
- #        data += str(x) + "\n"
+	cus_cursor.execute(sql_query)
+    cus_db.commit()
+    data = ""
+    for x in cus_cursor:
+        data += str(x) + "\n"
 
- #    if(len(data) == 0):
- #        data = "User not logged in"
-	# return data
+    if(len(data) == 0):
+        data = "User not logged in"
+	return data
 
 def refreshQueue():
 	global send_queue
