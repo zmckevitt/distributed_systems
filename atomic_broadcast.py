@@ -61,7 +61,7 @@ def queryDatabase(query):
 	# return query
 
 	cus_cursor.execute(sql_query)
-    cus_db.commit()
+	cus_db.commit()
     data = ""
     for x in cus_cursor:
         data += str(x) + "\n"
