@@ -3,6 +3,8 @@ import time
 import grpc
 import mysql.connector
 import sys
+import socket
+import random
 
 import marketplace_pb2_grpc as service
 import marketplace_pb2 as message
@@ -11,6 +13,7 @@ from pymongo import MongoClient
 c = MongoClient()
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
+server_list = ["10.128.0.4", "10.128.0.5", "10.128.0.6", "10.128.0.7", "10.128.0.8"]
 
 #myclient = pymongo.MongoClient("mongodb://mongoAdmin:Abstract09@localhost:27017")
 myclient = pymongo.MongoClient("mongodb://10.180.0.14:27017, 10.180.0.13:27017, 10.180.0.12:27017, 10.180.0.11:27017, 10.180.0.10:27017")
@@ -23,27 +26,31 @@ else:
     db = c['product']
 my_mongo_db = myclient["product"]
 
-"""prod_db = mysql.connector.connect(
-    host="10.180.0.6",
-    #host="127.0.0.1",
-    user="prod",
-    password="prodpassword",
-    database="product"
-)   """
+# prod_db = mysql.connector.connect(
+#     host="10.180.0.6",
+#     #host="127.0.0.1",
+#     user="prod",
+#     password="prodpassword",
+#     database="product"
+# )
 
-cus_db = mysql.connector.connect(
-    host="10.180.0.5",
-    #host="127.0.0.1",
-    user="prod",
-    password="prodpassword",
-    database="customer"
-)
+# cus_db = mysql.connector.connect(
+#     host="10.180.0.5",
+#     #host="127.0.0.1",
+#     user="prod",
+#     password="prodpassword",
+#     database="customer"
+# )
 
 # set up sockets
 # send query to database group
 # return result of query
 def pass_query(query):
-    pass
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # choose random server to send to
+    s.sendto(query.encode(), (server_list[random.randint(0,len(server_list)-1)], 8000))
+    resp, addr = s.recvfrom(1024)
+    return resp.decode()
 
 class SellerService(service.marketplaceServicer):
 
@@ -197,25 +204,24 @@ class SellerService(service.marketplaceServicer):
                     + "WHERE passwords.password = \"" + password + "\" " \
                     + "and users.name = \"" + username +"\";"
 
+        # cus_cursor.execute(sql_query)
 
-        cus_cursor.execute(sql_query)
-
-        # get the returned user id
-        # u_id will be -1 if no matching user is found
-        u_id = -1
-        for x in cus_cursor:
-            if(isinstance(x[0], int)):
-                u_id = x[0]
+        # # get the returned user id
+        # # u_id will be -1 if no matching user is found
+        # u_id = -1
+        # for x in cus_cursor:
+        #     if(isinstance(x[0], int)):
+        #         u_id = x[0]
 
 
-        # if user exists, set their status to logged in
-        if(u_id != -1):
-            sql_query = "UPDATE logged SET logged=1 WHERE id=" + str(u_id) + ";"
-            cus_cursor.execute(sql_query)
+        # # if user exists, set their status to logged in
+        # if(u_id != -1):
+        #     sql_query = "UPDATE logged SET logged=1 WHERE id=" + str(u_id) + ";"
+        #     cus_cursor.execute(sql_query)
 
-        cus_db.commit()
-        data = str(u_id)
-
+        # cus_db.commit()
+        # data = str(u_id)
+        data = pass_query("LOGIN\n"+sql_query)
         ret = message.Response(text=data)
         return ret
 
@@ -225,9 +231,9 @@ class SellerService(service.marketplaceServicer):
             data = "User is not logged in."
 
         else:
-            sql_query = "UPDATE logged SET logged=0 WHERE id=" + str(u_id) + ";"
-            cus_cursor.execute(sql_query)
-            cus_db.commit()
+            # sql_query = "UPDATE logged SET logged=0 WHERE id=" + str(u_id) + ";"
+            # cus_cursor.execute(sql_query)
+            # cus_db.commit()
             data = "Logged out."
         ret = message.Response(text=data)
         return ret
@@ -236,63 +242,72 @@ class SellerService(service.marketplaceServicer):
         name = request.username
         password = request.password
 
-        cus_cursor.execute("SELECT MAX(id) FROM customer.users;")
-        data = ""
+        sql_query = "SELECT MAX(id) FROM customer.users;"
+        data = pass_query("CREATE\n"+sql_query)
+        print("received data:", data)
 
-        new_id = 0
-        for x in cus_cursor:
-            if(isinstance(x[0], int)):
-                new_id = x[0]+1
+        # cus_cursor.execute("SELECT MAX(id) FROM customer.users;")
+        # data = ""
+
+        # new_id = 0
+        # for x in cus_cursor:
+        #     if(isinstance(x[0], int)):
+        #         new_id = x[0]+1
 
 
         sql_query = "INSERT INTO users " \
                     + "(name, id, nitems) " \
                     + "VALUES " \
-                    + "(\"" + name + "\", " + str(new_id) + ", " + "0);"
+                    + "(\"" + name + "\", " + data + ", " + "0);"
 
-        cus_cursor.execute(sql_query)
+        _ = pass_query("DISCARD\n" + sql_query)
+
+        # cus_cursor.execute(sql_query)
 
         sql_query = "INSERT INTO passwords "\
                     + "(id, password) " \
                     + "VALUES " \
-                    + "(" + str(new_id) + ", " + "\"" + password + "\")"
+                    + "(" + data+ ", " + "\"" + password + "\")"
 
-        cus_cursor.execute(sql_query)
+        _ = pass_query("DISCARD\n" + sql_query)
+
+        # cus_cursor.execute(sql_query)
 
         sql_query = "INSERT INTO feedback "\
                     + "(id, pos, neg) " \
                     + "VALUES " \
-                    + "(" + str(new_id) + ", 0, 0);"
+                    + "(" + data + ", 0, 0);"
 
-        cus_cursor.execute(sql_query)
+        _ = pass_query("DISCARD\n" + sql_query)
+
+        # cus_cursor.execute(sql_query)
 
 
-        # logged table might be useless if we are using client side cookies to track login
-        sql_query = "INSERT INTO logged "\
-                    + "(id, logged) " \
-                    + "VALUES " \
-                    + "(" + str(new_id) + ", 0);"
+        # # logged table might be useless if we are using client side cookies to track login
+        # sql_query = "INSERT INTO logged "\
+        #             + "(id, logged) " \
+        #             + "VALUES " \
+        #             + "(" + str(new_id) + ", 0);"
 
-        cus_cursor.execute(sql_query)
+        # cus_cursor.execute(sql_query)
 
         data = "Customer added successfully."
-        cus_db.commit()
-
+        # cus_db.commit()
         ret = message.Response(text=data)
         return ret
 
     def rating(self, request, context):
         s_id = request.s_id        
         sql_query = "SELECT pos, neg FROM feedback where id=" + str(s_id) + ";"
-        cus_cursor.execute(sql_query)
+        # cus_cursor.execute(sql_query)
 
-        data = ""
-        for x in cus_cursor:
-            data += str(x) + "\n"
+        # data = ""
+        # for x in cus_cursor:
+        #     data += str(x) + "\n"
 
-        if(len(data) == 0):
-            data = "User not logged in"
-
+        # if(len(data) == 0):
+        #     data = "Seller not found."
+        data = pass_query("DEFAULT\n"+sql_query)
         ret = message.Response(text=data)
         print(ret)
         return ret
@@ -316,5 +331,5 @@ def serve():
 if __name__ == "__main__":
     print('DB Server Start')
     #db_cursor = prod_db.cursor(buffered=True)
-    cus_cursor = cus_db.cursor(buffered=True)
+    #cus_cursor = cus_db.cursor(buffered=True)
     serve()

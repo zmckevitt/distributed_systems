@@ -5,6 +5,7 @@ import requests as reqs
 
 #SERVER_IP = "http://127.0.0.1"
 SERVER_IP = "http://34.106.83.186"
+
 SERVER_PORT = "5000"
 BASE_URL = SERVER_IP+":"+SERVER_PORT
 

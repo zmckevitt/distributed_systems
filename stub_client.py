@@ -10,6 +10,10 @@ if __name__ == "__main__":
 
 	while True:
 		msg = input("> ")
+		if(msg == ""):
+			data, server = s.recvfrom(1024)
+			print("received:", data)
+			continue
 		port = PORT_LIST[random.randint(0,2)]
 		addr = ("127.0.0.1", port)
 		s.sendto(msg.encode(), addr)

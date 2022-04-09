@@ -1,14 +1,22 @@
 import socket
 import sys
 import time
+import mysql.connector
 
+cus_db = mysql.connector.connect(
+    host="127.0.0.1",
+    user="prod",
+    password="prodpassword",
+    database="customer"
+)
+cus_cursor = cus_db.cursor(buffered=True)
 # convert to IPs later
 # make sure to include localhost!
-server_list = [8000, 8001, 8002]
+server_list = ["10.128.0.4", "10.128.0.5", "10.128.0.6", "10.128.0.7", "10.128.0.8"]
 
 LOCAL_SEQ = 0
 GLOBAL_SEQ = 0
-N_SERVERS = 3
+N_SERVERS = 5
 
 # PLACEHOLDER
 S_ID = -1
@@ -38,18 +46,45 @@ def formRequest(query):
 	req += query
 	return req
 
-def formSequence(req_id, send_id):
+def formSequence(req_id, send_id, tag, query):
 	global GLOBAL_SEQ
 	req = "SEQUENCE\n"
 	req += str(GLOBAL_SEQ+1) + "\n"
 	# request ID
 	req += req_id + "\n"
 	req += send_id + "\n"
+	req += tag + "\n"
+	req += query
 	return req
 
-def queryDatabase(query):
-	print(query)
-	pass
+def queryDatabase(query, tag):
+
+	# return query
+
+	cus_cursor.execute(query)
+	cus_db.commit()
+
+	if(tag == "LOGIN"):
+		u_id = -1
+		for x in cus_cursor:
+			if(isinstance(x[0], int)):
+				u_id = x[0]
+		data = str(u_id)
+	elif(tag == "CREATE"):
+		new_id = 0
+		for x in cus_cursor:
+			if(isinstance(x[0], int)):
+				new_id = x[0]+1
+		data = str(new_id)
+	elif(tag == "DEFAULT"):
+		data = ""
+		for x in cus_cursor:
+		    data += str(x) + "\n"
+	else:
+		data = "Database operation performed successfully"
+	if(len(data) == 0):
+	    data = "User not logged in"
+	return data
 
 def refreshQueue():
 	global send_queue
@@ -69,8 +104,8 @@ if __name__ == "__main__":
 	# eventually have predefined port on different IPs
 	S_ID = int(sys.argv[1])
 	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	s.bind(('', S_ID+8000))
-	print("starting server on port", str(S_ID+8000))
+	s.bind(('', 8000))
+	print("starting server on port", str(8000))
 	client_address = None
 
 	while True:
@@ -94,6 +129,8 @@ if __name__ == "__main__":
 			m_tokens = message.split("\n")
 			send_id = m_tokens[1]
 			req_id = m_tokens[2]
+			tag = m_tokens[3]
+			query = m_tokens[4]
 
 			# missing packet, transmit ACK
 			if(int(req_id) > LOCAL_SEQ):
@@ -115,10 +152,10 @@ if __name__ == "__main__":
 						if(m == "ACK"):
 							num_acks += 1
 
-					req = formSequence(send_id, req_id)
-					for port in server_list:
-						print("sending to server on port", port)
-						s.sendto(req.encode(), ("127.0.0.1", port))
+					req = formSequence(send_id, req_id, tag, query)
+					for ip in server_list:
+						print("sending to server on ip", ip)
+						s.sendto(req.encode(), (ip, 8000))
 				
 				# send ACK to designated server
 				else:
@@ -127,7 +164,7 @@ if __name__ == "__main__":
 
 					leader_id = GLOBAL_SEQ % N_SERVERS 
 
-					s.sendto("ACK".encode(), ("127.0.0.1", server_list[leader_id]))
+					s.sendto("ACK".encode(), (server_list[leader_id], 8000))
 
 		elif(q_tokens[0] == "SEQUENCE" or q_tokens[0] == "DEBUG"):
 
@@ -137,12 +174,21 @@ if __name__ == "__main__":
 			new_global = int(m_tokens[1])
 			req_id = int(m_tokens[2])
 			send_id = int(m_tokens[3])
+			tag = m_tokens[4]
+			query = m_tokens[5]
+			resp = ""
 
 			# if new global sequence number is next
 			if(new_global == GLOBAL_SEQ + 1):
 				GLOBAL_SEQ = new_global
 				# perform database function
 				print("DELIVERING REQUEST", GLOBAL_SEQ)
+				resp = queryDatabase(query, tag)
+
+				# deliver response to client
+				if(client_address is not None):
+					s.sendto(resp.encode(), client_address)
+					# client_address = None
 
 				# deliver outstanding messages in queue if they exist
 				i = GLOBAL_SEQ + 1
@@ -155,6 +201,18 @@ if __name__ == "__main__":
 					GLOBAL_SEQ +=  1
 					i += 1
 
+					q_tokens = q_request.split("\n")
+					if(q_tokens[0] == "DEBUG"):
+						resp = "DEBUG"
+					else:
+						tag = q_tokens[4]
+						query = q_tokens[5]
+						resp = queryDatabase(query, tag)
+					# deliver response to client
+					if(client_address is not None):
+						s.sendto(resp.encode(), client_address)
+				client_address = None
+
 			# if old message, do nothing
 			elif(new_global <= GLOBAL_SEQ):
 				pass
@@ -163,11 +221,12 @@ if __name__ == "__main__":
 				print("Out of order message detected... adding to queue")
 				# store message in queue indexed by order
 				req_queue[new_global] = message
+				if(client_address is not None):
+					s.sendto("".encode(), client_address)
 
-			# deliver response to client
-			if(client_address is not None):
-				s.sendto("response!".encode(), client_address)
-				client_address = None
+
+			# if(client_address is not None):
+			# 	client_address = None
 
 		# retransmit packet
 		elif(q_tokens[0] == "NAK"):
@@ -180,9 +239,9 @@ if __name__ == "__main__":
 			client_address = addr
 
 			req = formRequest(message)
-			for port in server_list:
-				print("sending to server on port", port)
-				s.sendto(req.encode(), ("127.0.0.1", port))
+			for ip in server_list:
+				print("sending to server on ip", ip)
+				s.sendto(req.encode(), (ip, 8000))
 				send_queue[LOCAL_SEQ] = (req, time.time())
 
 		refreshQueue()
