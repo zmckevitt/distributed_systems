@@ -3,12 +3,12 @@ import sys
 import time
 import mysql.connector
 
-cus_db = mysql.connector.connect(
-    host="127.0.0.1",
-    user="prod",
-    password="prodpassword",
-    database="customer"
-)
+# cus_db = mysql.connector.connect(
+#     host="127.0.0.1",
+#     user="prod",
+#     password="prodpassword",
+#     database="customer"
+# )
 
 # convert to IPs later
 # make sure to include localhost!
@@ -60,15 +60,15 @@ def queryDatabase(query):
 
 	return query
 
-	cus_cursor.execute(sql_query)
-    cus_db.commit()
-    data = ""
-    for x in cus_cursor:
-        data += str(x) + "\n"
+	# cus_cursor.execute(sql_query)
+ #    cus_db.commit()
+ #    data = ""
+ #    for x in cus_cursor:
+ #        data += str(x) + "\n"
 
-    if(len(data) == 0):
-        data = "User not logged in"
-	return data
+ #    if(len(data) == 0):
+ #        data = "User not logged in"
+	# return data
 
 def refreshQueue():
 	global send_queue
@@ -91,7 +91,7 @@ if __name__ == "__main__":
 	s.bind(('', 8000))
 	print("starting server on port", str(8000))
 	client_address = None
-	cus_cursor = cus_db.cursor(buffered=True)
+	# cus_cursor = cus_db.cursor(buffered=True)
 
 	while True:
 
