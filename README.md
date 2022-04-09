@@ -130,52 +130,52 @@ We determined timing benchmarks entirely client-side, measuring the timing diffe
 
 Seller benchmarks: 
 
-- ```sell``` - 0.12314s
+- ```sell``` - 0.4525485038757324 s
 
-- ```modify``` - 0.43276s
+- ```modify``` - 0.24502134323120117 s
 
-- ```remove``` - 0.11799s
+- ```remove``` - 0.1645803451538086 s
 
-- ```list``` - 0.17842s
+- ```list``` - 0.6282854080200195 s
 
-- ```create``` - 0.54668s
+- ```create``` - 0.4850144386291504 s
 
-- ```login``` - 0.11099s
+- ```login``` - 0.47797107696533203 s
 
-- ```logout``` - 0.19256s
+- ```logout``` - 0.18416523933410645 s
 
-- ```rating``` - 0.39720s
+- ```rating``` - 0.3833751678466797 s
 
 
-Seller benchmark average: 0.2624675s = 262.46ms
+Seller benchmark average: 0.37625 s = 376.25 ms
 
 Buyer benchmarks:
 
-- ```search``` - 0.42031s
+- ```search``` - 0.606245756149292 s
 
-- ```display``` - 0.40018s
+- ```display``` - 0.3271939754486084 s
 
-- ```remove``` - 0.42287s
+- ```remove``` - 0.5075178146362305 s
 
-- ```clear``` - 0.13140s
+- ```clear``` - 0.4774184226989746 s
 
-- ```add``` - 0.56263s
+- ```add``` - 0.3090794086456299 s
 
--```create```- 0.91323s
+-```create```- 0.3071286678314209 s
 
--```login```- 0.23005s
+-```login```- 0.6345584392547607 s
 
--```logout```- 0.34269s
+-```logout```- 0.5064713954925537 s
 
--```purchase```- 0.60980s
+-```purchase```- 0.62956842178562558 s
 
--```feedback```- 0.39177
+-```feedback```- 0.42427706718444824 s
 
--```rating```- 0.16186s
+-```rating```- 0.5165302753448486 s
 
--```history```- 1.00593s
+-```history```- 0.24055194854736328 s
 
-Buyer benchmark Average: 0.46606 = 466.06ms
+Buyer benchmark Average: 0.4575 = 457.5 ms
 
 Overal Average: 386.22ms
 

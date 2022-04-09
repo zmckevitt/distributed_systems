@@ -7,24 +7,30 @@ import sys
 import marketplace_pb2_grpc as service
 import marketplace_pb2 as message
 import pymongo
+from pymongo import MongoClient
+c = MongoClient()
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
-myclient = pymongo.MongoClient("mongodb://mongoAdmin:Abstract09@localhost:27017")
-my_mongo_db = myclient["product"]
+#myclient = pymongo.MongoClient("mongodb://mongoAdmin:Abstract09@localhost:27017")
+#myclient = pymongo.MongoClient("mongodb://34.106.188.170:27017, 34.106.139.133:27017, 34.106.31.27 :27017, 34.106.9.186:27017")
+myclient = pymongo.MongoClient("mongodb://10.180.0.14:27017, 10.180.0.13:27017, 10.180.0.12:27017, 10.180.0.11:27017, 10.180.0.10:27017")
+
 dblist = myclient.list_database_names()
 if "product" in dblist:
     print("Found database")
 else:
-    print("Database not found")
+    print("Database not found. Creating...")
+    db = c['product']
+my_mongo_db = myclient["product"]
 
-prod_db = mysql.connector.connect(
+"""prod_db = mysql.connector.connect(
     host="10.180.0.6",
     #host="127.0.0.1",
     user="prod",
     password="prodpassword",
     database="product"
-)
+)   """
 
 cus_db = mysql.connector.connect(
     host="10.180.0.5",
@@ -465,6 +471,6 @@ def serve():
 
 if __name__ == "__main__":
     print('DB Server Start')
-    db_cursor = prod_db.cursor(buffered=True)
+    #db_cursor = prod_db.cursor(buffered=True)
     cus_cursor = cus_db.cursor(buffered=True)
     serve()
