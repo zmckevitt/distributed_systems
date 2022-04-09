@@ -76,11 +76,12 @@ def queryDatabase(query, tag):
 			if(isinstance(x[0], int)):
 				new_id = x[0]+1
 		data = str(new_id)
-	else:
+	elif(tag == "DEFAULT"):
 		data = ""
 		for x in cus_cursor:
 		    data += str(x) + "\n"
-
+	else:
+		data = "Database operation performed successfully"
 	if(len(data) == 0):
 	    data = "User not logged in"
 	return data

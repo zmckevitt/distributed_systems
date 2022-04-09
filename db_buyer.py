@@ -434,7 +434,7 @@ class BuyerService(service.marketplaceServicer):
                     + "VALUES " \
                     + "(\"" + name + "\", " + data + ", " + "0);"
 
-        _ = pass_query("DEFAULT\n" + sql_query)
+        _ = pass_query("DISCARD\n" + sql_query)
 
         # cus_cursor.execute(sql_query)
 
@@ -443,7 +443,7 @@ class BuyerService(service.marketplaceServicer):
                     + "VALUES " \
                     + "(" + data+ ", " + "\"" + password + "\")"
 
-        _ = pass_query("DEFAULT\n" + sql_query)
+        _ = pass_query("DISCARD\n" + sql_query)
 
         # cus_cursor.execute(sql_query)
 
@@ -452,7 +452,7 @@ class BuyerService(service.marketplaceServicer):
                     + "VALUES " \
                     + "(" + data + ", 0, 0);"
 
-        _ = pass_query("DEFAULT\n" + sql_query)
+        _ = pass_query("DISCARD\n" + sql_query)
 
         # cus_cursor.execute(sql_query)
 
