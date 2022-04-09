@@ -44,7 +44,7 @@ def pass_query(query):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     # choose random server to send to
     s.sendto(query.encode(), (server_list[random.randint(0,len(server_list)-1)], 8000))
-    resp = s.recvfrom(1024)
+    resp, addr = s.recvfrom(1024)
     return resp
 
 class SellerService(service.marketplaceServicer):

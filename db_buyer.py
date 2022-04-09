@@ -12,13 +12,13 @@ import pymongo
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 server_list = ["10.128.0.4", "10.128.0.5", "10.128.0.6", "10.128.0.7", "10.128.0.8"]
-myclient = pymongo.MongoClient("mongodb://mongoAdmin:Abstract09@localhost:27017")
-my_mongo_db = myclient["product"]
-dblist = myclient.list_database_names()
-if "product" in dblist:
-    print("Found database")
-else:
-    print("Database not found")
+# myclient = pymongo.MongoClient("mongodb://mongoAdmin:Abstract09@localhost:27017")
+# my_mongo_db = myclient["product"]
+# dblist = myclient.list_database_names()
+# if "product" in dblist:
+#     print("Found database")
+# else:
+#     print("Database not found")
 
 # prod_db = mysql.connector.connect(
 #     host="10.180.0.6",
@@ -43,7 +43,7 @@ def pass_query(query):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     # choose random server to send to
     s.sendto(query.encode(), (server_list[random.randint(0,len(server_list)-1)], 8000))
-    resp = s.recvfrom(1024)
+    resp, addr = s.recvfrom(1024)
     return resp
 
 class BuyerService(service.marketplaceServicer):
@@ -478,6 +478,6 @@ def serve():
 
 if __name__ == "__main__":
     print('DB Server Start')
-    db_cursor = prod_db.cursor(buffered=True)
-    cus_cursor = cus_db.cursor(buffered=True)
+    # db_cursor = prod_db.cursor(buffered=True)
+    # cus_cursor = cus_db.cursor(buffered=True)
     serve()
