@@ -199,9 +199,6 @@ class SellerService(service.marketplaceServicer):
                     + "WHERE passwords.password = \"" + password + "\" " \
                     + "and users.name = \"" + username +"\";"
 
-        data = pass_query("LOGIN\n"+sql_query)
-        print("received data:", data)
-
         # cus_cursor.execute(sql_query)
 
         # # get the returned user id
@@ -219,7 +216,7 @@ class SellerService(service.marketplaceServicer):
 
         # cus_db.commit()
         # data = str(u_id)
-
+        data = pass_query("LOGIN\n"+sql_query)
         ret = message.Response(text=data)
         return ret
 
@@ -253,24 +250,30 @@ class SellerService(service.marketplaceServicer):
         #         new_id = x[0]+1
 
 
-        # sql_query = "INSERT INTO users " \
-        #             + "(name, id, nitems) " \
-        #             + "VALUES " \
-        #             + "(\"" + name + "\", " + str(new_id) + ", " + "0);"
+        sql_query = "INSERT INTO users " \
+                    + "(name, id, nitems) " \
+                    + "VALUES " \
+                    + "(\"" + name + "\", " + data + ", " + "0);"
+
+        _ = pass_query("DISCARD\n" + sql_query)
 
         # cus_cursor.execute(sql_query)
 
-        # sql_query = "INSERT INTO passwords "\
-        #             + "(id, password) " \
-        #             + "VALUES " \
-        #             + "(" + str(new_id) + ", " + "\"" + password + "\")"
+        sql_query = "INSERT INTO passwords "\
+                    + "(id, password) " \
+                    + "VALUES " \
+                    + "(" + data+ ", " + "\"" + password + "\")"
+
+        _ = pass_query("DISCARD\n" + sql_query)
 
         # cus_cursor.execute(sql_query)
 
-        # sql_query = "INSERT INTO feedback "\
-        #             + "(id, pos, neg) " \
-        #             + "VALUES " \
-        #             + "(" + str(new_id) + ", 0, 0);"
+        sql_query = "INSERT INTO feedback "\
+                    + "(id, pos, neg) " \
+                    + "VALUES " \
+                    + "(" + data + ", 0, 0);"
+
+        _ = pass_query("DISCARD\n" + sql_query)
 
         # cus_cursor.execute(sql_query)
 
@@ -283,9 +286,8 @@ class SellerService(service.marketplaceServicer):
 
         # cus_cursor.execute(sql_query)
 
-        # data = "Customer added successfully."
+        data = "Customer added successfully."
         # cus_db.commit()
-
         ret = message.Response(text=data)
         return ret
 
@@ -299,9 +301,8 @@ class SellerService(service.marketplaceServicer):
         #     data += str(x) + "\n"
 
         # if(len(data) == 0):
-        #     data = "User not logged in"
+        #     data = "Seller not found."
         data = pass_query("DEFAULT\n"+sql_query)
-
         ret = message.Response(text=data)
         print(ret)
         return ret
