@@ -12,7 +12,7 @@ cus_db = mysql.connector.connect(
 
 # convert to IPs later
 # make sure to include localhost!
-server_list = ["10.180.0.15", "10.180.0.16", "10.180.0.17", "10.180.0.18", "10.180.0.19"]
+server_list = ["10.128.0.4", "10.128.0.5", "10.128.0.6", "10.128.0.7", "10.128.0.8"]
 
 LOCAL_SEQ = 0
 GLOBAL_SEQ = 0

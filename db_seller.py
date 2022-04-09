@@ -11,7 +11,7 @@ import marketplace_pb2 as message
 import pymongo
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
-server_list = ["10.180.0.15", "10.180.0.16", "10.180.0.17", "10.180.0.18", "10.180.0.19"]
+server_list = ["10.128.0.4", "10.128.0.5", "10.128.0.6", "10.128.0.7", "10.128.0.8"]
 
 myclient = pymongo.MongoClient("mongodb://mongoAdmin:Abstract09@localhost:27017")
 my_mongo_db = myclient["product"]
