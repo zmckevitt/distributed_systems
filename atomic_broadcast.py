@@ -62,12 +62,12 @@ def queryDatabase(query):
 
 	cus_cursor.execute(sql_query)
 	cus_db.commit()
-    data = ""
-    for x in cus_cursor:
-        data += str(x) + "\n"
+	data = ""
+	for x in cus_cursor:
+	    data += str(x) + "\n"
 
-    if(len(data) == 0):
-        data = "User not logged in"
+	if(len(data) == 0):
+	    data = "User not logged in"
 	return data
 
 def refreshQueue():
