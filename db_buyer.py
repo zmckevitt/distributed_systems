@@ -44,7 +44,7 @@ def pass_query(query):
     # choose random server to send to
     s.sendto(query.encode(), (server_list[random.randint(0,len(server_list)-1)], 8000))
     resp, addr = s.recvfrom(1024)
-    return resp
+    return resp.decode()
 
 class BuyerService(service.marketplaceServicer):
     def search(self, request, context):
