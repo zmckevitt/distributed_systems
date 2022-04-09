@@ -16,7 +16,7 @@ server_list = ["10.128.0.4", "10.128.0.5", "10.128.0.6", "10.128.0.7", "10.128.0
 
 LOCAL_SEQ = 0
 GLOBAL_SEQ = 0
-N_SERVERS = 3
+N_SERVERS = 5
 
 # PLACEHOLDER
 S_ID = -1
