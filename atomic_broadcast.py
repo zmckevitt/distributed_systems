@@ -53,6 +53,7 @@ def formSequence(req_id, send_id, tag, query):
 	# request ID
 	req += req_id + "\n"
 	req += send_id + "\n"
+	req += tag + "\n"
 	req += query
 	return req
 
