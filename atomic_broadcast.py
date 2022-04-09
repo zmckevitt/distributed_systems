@@ -46,7 +46,7 @@ def formRequest(query):
 	req += query
 	return req
 
-def formSequence(req_id, send_id, query):
+def formSequence(req_id, send_id, tag, query):
 	global GLOBAL_SEQ
 	req = "SEQUENCE\n"
 	req += str(GLOBAL_SEQ+1) + "\n"
@@ -56,15 +56,29 @@ def formSequence(req_id, send_id, query):
 	req += query
 	return req
 
-def queryDatabase(query):
+def queryDatabase(query, tag):
 
 	# return query
 
 	cus_cursor.execute(query)
 	cus_db.commit()
-	data = ""
-	for x in cus_cursor:
-	    data += str(x) + "\n"
+
+	if(tag == "LOGIN"):
+		u_id = -1
+		for x in cus_cursor:
+			if(isinstance(x[0], int)):
+				u_id = x[0]
+		data = str(u_id)
+	elif(tag == "CREATE"):
+		new_id = 0
+		for x in cus_cursor:
+			if(isinstance(x[0], int)):
+				new_id = x[0]+1
+		data = str(new_id)
+	else:
+		data = ""
+		for x in cus_cursor:
+		    data += str(x) + "\n"
 
 	if(len(data) == 0):
 	    data = "User not logged in"
@@ -113,7 +127,8 @@ if __name__ == "__main__":
 			m_tokens = message.split("\n")
 			send_id = m_tokens[1]
 			req_id = m_tokens[2]
-			query = m_tokens[3]
+			tag = m_tokens[3]
+			query = m_tokens[4]
 
 			# missing packet, transmit ACK
 			if(int(req_id) > LOCAL_SEQ):
@@ -135,7 +150,7 @@ if __name__ == "__main__":
 						if(m == "ACK"):
 							num_acks += 1
 
-					req = formSequence(send_id, req_id, query)
+					req = formSequence(send_id, req_id, tag, query)
 					for ip in server_list:
 						print("sending to server on ip", ip)
 						s.sendto(req.encode(), (ip, 8000))
@@ -157,7 +172,8 @@ if __name__ == "__main__":
 			new_global = int(m_tokens[1])
 			req_id = int(m_tokens[2])
 			send_id = int(m_tokens[3])
-			query = m_tokens[4]
+			tag = m_tokens[4]
+			query = m_tokens[5]
 			resp = ""
 
 			# if new global sequence number is next
@@ -165,7 +181,7 @@ if __name__ == "__main__":
 				GLOBAL_SEQ = new_global
 				# perform database function
 				print("DELIVERING REQUEST", GLOBAL_SEQ)
-				resp = queryDatabase(query)
+				resp = queryDatabase(query, tag)
 
 				# deliver response to client
 				if(client_address is not None):
@@ -187,8 +203,9 @@ if __name__ == "__main__":
 					if(q_tokens[0] == "DEBUG"):
 						resp = "DEBUG"
 					else:
-						query = q_tokens[4]
-						resp = queryDatabase(query)
+						tag = q_tokens[4]
+						query = q_tokens[5]
+						resp = queryDatabase(query, tag)
 					# deliver response to client
 					if(client_address is not None):
 						s.sendto(resp.encode(), client_address)

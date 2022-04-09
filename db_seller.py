@@ -199,7 +199,7 @@ class SellerService(service.marketplaceServicer):
                     + "WHERE passwords.password = \"" + password + "\" " \
                     + "and users.name = \"" + username +"\";"
 
-        data = pass_query(sql_query)
+        data = pass_query("LOGIN\n"+sql_query)
         print("received data:", data)
 
         # cus_cursor.execute(sql_query)
@@ -241,7 +241,7 @@ class SellerService(service.marketplaceServicer):
         password = request.password
 
         sql_query = "SELECT MAX(id) FROM customer.users;"
-        data = pass_query(sql_query)
+        data = pass_query("CREATE\n"+sql_query)
         print("received data:", data)
 
         # cus_cursor.execute("SELECT MAX(id) FROM customer.users;")
@@ -300,7 +300,7 @@ class SellerService(service.marketplaceServicer):
 
         # if(len(data) == 0):
         #     data = "User not logged in"
-        data = pass_query(sql_query)
+        data = pass_query("DEFAULT\n"+sql_query)
 
         ret = message.Response(text=data)
         print(ret)

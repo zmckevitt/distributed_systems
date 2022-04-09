@@ -277,7 +277,8 @@ class BuyerService(service.marketplaceServicer):
         #         cus_db.commit()
 
         #         data = "Feedback given."
-        data = pass_query("feedback")
+        # data = pass_query("DEFAULT\n"+"feedback")
+        data = "Feedback given."
         ret = message.Response(text=data)
         print(ret)
         return ret
@@ -293,7 +294,7 @@ class BuyerService(service.marketplaceServicer):
 
         # if(len(data) == 0):
         #     data = "Seller not found."
-        data = pass_query(sql_query)
+        data = pass_query("DEFAULT\n"+sql_query)
         ret = message.Response(text=data)
         print(ret)
         return ret
@@ -314,7 +315,7 @@ class BuyerService(service.marketplaceServicer):
             #     data="User has no purchase history."
 
             # cus_db.commit()
-            data = pass_query(sql_query)
+            data = pass_query("DEFAULT\n"+sql_query)
         ret = message.Response(text=data)
         print(ret)
         return ret
@@ -394,7 +395,7 @@ class BuyerService(service.marketplaceServicer):
 
         # cus_db.commit()
         # data = str(u_id)
-        data = pass_query(sql_query)
+        data = pass_query("LOGIN\n"+sql_query)
         ret = message.Response(text=data)
         return ret
 
@@ -416,7 +417,7 @@ class BuyerService(service.marketplaceServicer):
         password = request.password
 
         sql_query = "SELECT MAX(id) FROM customer.users;"
-        data = pass_query(sql_query)
+        data = pass_query("CREATE\n"+sql_query)
         print("received data:", data)
 
         # cus_cursor.execute("SELECT MAX(id) FROM customer.users;")
