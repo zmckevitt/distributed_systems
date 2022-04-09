@@ -9,7 +9,7 @@ cus_db = mysql.connector.connect(
     password="prodpassword",
     database="customer"
 )
-
+cus_cursor = cus_db.cursor(buffered=True)
 # convert to IPs later
 # make sure to include localhost!
 server_list = ["10.128.0.4", "10.128.0.5", "10.128.0.6", "10.128.0.7", "10.128.0.8"]
@@ -91,7 +91,6 @@ if __name__ == "__main__":
 	s.bind(('', 8000))
 	print("starting server on port", str(8000))
 	client_address = None
-	# cus_cursor = cus_db.cursor(buffered=True)
 
 	while True:
 
