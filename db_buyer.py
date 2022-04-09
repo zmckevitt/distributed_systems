@@ -429,24 +429,30 @@ class BuyerService(service.marketplaceServicer):
         #         new_id = x[0]+1
 
 
-        # sql_query = "INSERT INTO users " \
-        #             + "(name, id, nitems) " \
-        #             + "VALUES " \
-        #             + "(\"" + name + "\", " + str(new_id) + ", " + "0);"
+        sql_query = "INSERT INTO users " \
+                    + "(name, id, nitems) " \
+                    + "VALUES " \
+                    + "(\"" + name + "\", " + data + ", " + "0);"
+
+        _ = pass_query("DEFAULT\n" + sql_query)
 
         # cus_cursor.execute(sql_query)
 
-        # sql_query = "INSERT INTO passwords "\
-        #             + "(id, password) " \
-        #             + "VALUES " \
-        #             + "(" + str(new_id) + ", " + "\"" + password + "\")"
+        sql_query = "INSERT INTO passwords "\
+                    + "(id, password) " \
+                    + "VALUES " \
+                    + "(" + data+ ", " + "\"" + password + "\")"
+
+        _ = pass_query("DEFAULT\n" + sql_query)
 
         # cus_cursor.execute(sql_query)
 
-        # sql_query = "INSERT INTO feedback "\
-        #             + "(id, pos, neg) " \
-        #             + "VALUES " \
-        #             + "(" + str(new_id) + ", 0, 0);"
+        sql_query = "INSERT INTO feedback "\
+                    + "(id, pos, neg) " \
+                    + "VALUES " \
+                    + "(" + data + ", 0, 0);"
+
+        _ = pass_query("DEFAULT\n" + sql_query)
 
         # cus_cursor.execute(sql_query)
 
@@ -459,7 +465,7 @@ class BuyerService(service.marketplaceServicer):
 
         # cus_cursor.execute(sql_query)
 
-        # data = "Customer added successfully."
+        data = "Customer added successfully."
         # cus_db.commit()
         ret = message.Response(text=data)
         return ret
