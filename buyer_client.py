@@ -1,13 +1,14 @@
 import sys
 import time
 import requests as reqs
-
+import random
 
 #SERVER_IP = "http://127.0.0.1"
 SERVER_IP = "http://34.106.83.186"
+SERVER_LIST = ["34.127.46.242", "34.83.58.101", "34.83.227.114"]
 
 SERVER_PORT = "5000"
-BASE_URL = SERVER_IP+":"+SERVER_PORT
+# BASE_URL = SERVER_IP+":"+SERVER_PORT
 
 # REST API allows for cookies when stored client side
 # cookie required to maintain login state
@@ -33,7 +34,7 @@ if __name__ == "__main__":
 
     while True:
         message = input("> ")
-
+        BASE_URL = "http://" + SERVER_LIST[random.randint(0,2)] + ":" + SERVER_PORT
         if(message == "search"):
             search_category = input("Please enter search category: ")
             search_keywords = input("Please enter up to five keywords: ")

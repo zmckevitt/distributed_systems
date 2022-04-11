@@ -1,11 +1,13 @@
 import sys
 import time
 import requests as reqs
+import random
 
 #SERVER_IP = "http://127.0.0.1"
-SERVER_IP = "http://34.106.188.170"
+# SERVER_IP = "http://34.106.188.170"
+SERVER_LIST = ["35.203.165.9", "35.185.205.144", "35.227.176.114"]
 SERVER_PORT = "5000"
-BASE_URL = SERVER_IP+":"+SERVER_PORT
+# BASE_URL = SERVER_IP+":"+SERVER_PORT
 
 # REST API allows for cookies when stored client side
 # cookie required to maintain login state
@@ -27,7 +29,7 @@ if __name__ == "__main__":
 
     while True:
         message = input("> ")            
-
+        BASE_URL = "http://" + SERVER_LIST[random.randint(0,2)] + ":" + SERVER_PORT
         if(message == "sell"):
             item_name = input("Please enter an item name: ")
             item_category = input("Please enter an item category: ")
