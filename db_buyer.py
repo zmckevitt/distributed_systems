@@ -34,14 +34,14 @@ my_mongo_db = myclient["product"]
     password="prodpassword",
     database="product"
 )   """
-
+"""
 cus_db = mysql.connector.connect(
     host="10.180.0.5",
     #host="127.0.0.1",
     user="prod",
     password="prodpassword",
     database="customer"
-)
+)   """
 
 # cus_db = mysql.connector.connect(
 #     host="10.180.0.5",
@@ -351,23 +351,34 @@ class BuyerService(service.marketplaceServicer):
             # if invalid, exit
 
             # if valid, add item to purchase table FROM CART
-            pre_query = "SELECT id, b_id, quantity FROM product.cart WHERE product.cart.b_id=" + str(u_id) + ";"
+            # pre_query = "SELECT id, b_id, quantity FROM product.cart WHERE product.cart.b_id=" + str(u_id) + ";"
+            # Mongo implementation
+            cart = my_mongo_db.get_collection("cart")
+            rows = cart.find({"b_id": request.u_id})
+            data = ""
+            #for row in rows:
+            #   data += str(row) + "\n"
+            #db_cursor.execute(pre_query)
 
-            db_cursor.execute(pre_query)
-
-            for row in db_cursor:
+            for row in rows:
                 try:
-                    _id = row[0]
-                    b_id = row[1]
-                    quantity = row[2]
-                    sql_query = "INSERT INTO customer.purchased (id, b_id, quantity) " \
-                            + "VALUES (" + str(_id) + ", " + str(b_id) + ", " + str(quantity) + ");"
+                    #_id = row[0]
+                    #b_id = row[1]
+                    #quantity = row[2]
+                    #sql_query = "INSERT INTO customer.purchased (id, b_id, quantity) " \
+                    #       + "VALUES (" + str(_id) + ", " + str(b_id) + ", " + str(quantity) + ");"
 
-                    cus_cursor.execute(sql_query)
-                    cus_db.commit()
-                    print(_id)
-                    print(b_id)
-                    print(quantity)
+                    _id = row.get("id")
+                    b_id = row.get("b_id")
+                    quantity = row.get("quantity")
+
+                    sql_query = "INSERT INTO customer.purchased (id, b_id, quantity) " \
+                        #       + "VALUES (" + str(_id) + ", " + str(b_id) + ", " + str(quantity) + ");"
+
+                    data = pass_query("DEFAULT\n" + sql_query)
+                    #cus_cursor.execute(sql_query)
+                    #cus_db.commit()
+
                 except:
                     break
 
@@ -375,10 +386,10 @@ class BuyerService(service.marketplaceServicer):
             # clear cart
             sql_query = "DELETE FROM product.cart WHERE b_id=" + str(u_id) + ";"
 
-            db_cursor.execute(sql_query)
-
-            prod_db.commit()
-            data = "Items have been purchased!"
+            #db_cursor.execute(sql_query)
+            data = pass_query("DEFAULT\n" + sql_query)
+            #prod_db.commit()
+            #data = "Items have been purchased!"
 
         ret = message.Response(text=data)
         print(ret)
