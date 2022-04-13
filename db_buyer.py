@@ -34,14 +34,6 @@ my_mongo_db = myclient["product"]
     password="prodpassword",
     database="product"
 )   """
-"""
-cus_db = mysql.connector.connect(
-    host="10.180.0.5",
-    #host="127.0.0.1",
-    user="prod",
-    password="prodpassword",
-    database="customer"
-)   """
 
 # cus_db = mysql.connector.connect(
 #     host="10.180.0.5",
